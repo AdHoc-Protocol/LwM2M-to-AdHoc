@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Multi-WAN Health Check</Name>
+        <Description1><![CDATA[WAN connection health monitoring with ping/HTTP checks, latency tracking, and automatic failover triggers.]]></Description1>
+        <ObjectID>10526</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10526</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Interface Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Network interface name to monitor (e.g., "wan", "wan2", "wwan0"). This identifies the WAN interface being health-checked. Must correspond to an existing network interface configured in the system. Each health check instance monitors a single interface.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Probe Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Type of health check probe to execute: 0=ICMP Ping (raw socket ICMP echo request/reply, requires root/CAP_NET_RAW), 1=HTTP/HTTPS (TCP connection and HTTP HEAD request to web server), 2=DNS (DNS hostname resolution test), 3=TCP (simple TCP connection test to specified port). Different probe types have different characteristics - ICMP is lightweight but may be blocked by firewalls, HTTP validates application layer, DNS tests name resolution, TCP verifies port reachability.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Target Host</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Target host for health check probes, specified as either an IPv4 address (e.g., "8.8.8.8") or hostname (e.g., "www.google.com"). The target should be a reliable, always-available host that can respond to the configured probe type. Common choices include public DNS servers (8.8.8.8, 1.1.1.1) for ICMP/DNS probes, or well-known websites for HTTP probes. The target must be reachable through the monitored WAN interface.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Target Port</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[TCP/UDP port number for HTTP and TCP probe types (range: 1-65535). Not used for ICMP or DNS probes. Common values: 80 (HTTP), 443 (HTTPS), 53 (DNS over TCP). The specified port must be open and accepting connections on the target host for the probe to succeed.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Probe Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..3600</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Time interval between consecutive health check probes in seconds (range: 1-3600 seconds / 1 second to 1 hour). Shorter intervals provide faster failure detection but increase network overhead and system load. Typical values: 10 seconds for critical links, 30 seconds for normal monitoring, 60+ seconds for low-priority monitoring. Balance between responsiveness and resource consumption based on deployment requirements.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Probe Timeout</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>100..30000</RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Maximum time to wait for a probe response in milliseconds (range: 100-30000 ms / 0.1-30 seconds). If the target doesn't respond within this timeout, the probe is considered failed. Must be shorter than the probe interval. Typical values: 2000ms for local/low-latency links, 5000ms for satellite/high-latency links. Consider expected network latency and jitter when setting this value.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Failure Threshold</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of consecutive failed probes before marking the interface as unhealthy (range: 1-100). Higher values reduce false positives from transient failures but delay failure detection. The interface transitions from HEALTHY to DEGRADED at half this threshold, then to UNHEALTHY at the full threshold. Typical values: 3 for aggressive failover, 5 for balanced monitoring, 10 for conservative monitoring. Consider network stability when configuring.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Recovery Threshold</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of consecutive successful probes before marking an unhealthy interface as healthy again (range: 1-100). Higher values prevent premature recovery from intermittent success but delay interface restoration. This threshold prevents interface flapping by requiring sustained success before returning to service. Typical values: 3 for quick recovery, 5 for balanced recovery, 10 for conservative recovery. Often set equal to or higher than failure threshold.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Current State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current health state of the monitored interface: 0=HEALTHY (interface is functioning normally, all recent probes successful), 1=DEGRADED (interface experiencing intermittent failures, consecutive failures below full threshold), 2=UNHEALTHY (interface has failed, consecutive failures exceeded threshold). State transitions use hysteresis via separate failure and recovery thresholds to prevent flapping. Read-only resource updated automatically by the health check state machine.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Last Probe Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of the most recent probe execution. Updated after each probe attempt regardless of success or failure. Use this to verify that probing is active and to calculate time since last check. Can be compared with current time to detect if health checking has stopped unexpectedly.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Last Probe Result</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Result of the most recent probe: true=SUCCESS (probe completed successfully within timeout), false=FAILURE (probe timed out, connection refused, or other error). This provides immediate visibility into the latest probe outcome. Multiple consecutive failures trigger state transitions based on the failure threshold.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Average Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Exponential moving average (EMA) of probe latency in milliseconds. Uses alpha=0.2 (20% weight to new values, 80% to historical average) for smooth tracking of latency trends while responding to changes. Only updated for successful probes. Provides a representative measure of typical interface latency, smoothing out short-term variations. Useful for comparing interface performance and detecting gradual degradation.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Min Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Minimum observed latency across all successful probes in milliseconds. Represents the best-case performance of the interface. Can be used to establish baseline performance expectations. Reset to 0 when statistics are reset. Useful for capacity planning and identifying optimal interface characteristics.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Max Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Maximum observed latency across all successful probes in milliseconds. Represents worst-case performance while still meeting success criteria (below timeout). Indicates peak latency experienced during monitoring period. Large differences between min and max suggest variable/inconsistent link performance. Reset to 0 when statistics are reset.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Jitter</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Mean absolute deviation of latency between consecutive probes in milliseconds. Measures latency variation/instability - low jitter indicates consistent performance, high jitter suggests variable/unpredictable link behavior. Calculated from the last 100 latency samples. Critical for real-time applications (VoIP, video conferencing) which are sensitive to timing variations. Values above 30ms can impact VoIP quality.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Packet Loss</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0.0..100.0</RangeEnumeration>
+                <Units>%</Units>
+                <Description><![CDATA[Percentage of failed probes out of total probes executed (range: 0.0-100.0%). Calculated as (Failed Probes / Total Probes) × 100. Provides overall reliability metric for the monitored interface. Even small packet loss (>1%) can significantly impact application performance. Reset when statistics are reset via the Reset Stats execute resource.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Consecutive Failures</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current count of consecutive failed probes. Increments with each failure, resets to 0 on any success. Used by the health state machine to determine interface health transitions. When this counter reaches half of Failure Threshold, the state transitions to DEGRADED. When it reaches the full Failure Threshold, the state transitions to UNHEALTHY. Provides visibility into how close the interface is to being marked down.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Consecutive Successes</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current count of consecutive successful probes. Increments with each success, resets to 0 on any failure. Used by the health state machine to determine interface recovery transitions. When this counter reaches Recovery Threshold, an unhealthy or degraded interface transitions back to HEALTHY state. Provides visibility into recovery progress for failed interfaces.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Total Probes</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of probes executed since monitoring started or statistics were last reset. Includes both successful and failed probes. Increments with every probe attempt. Used as denominator for packet loss percentage calculation. Provides context for other statistics - higher values indicate more established/reliable statistics. Reset to 0 when statistics are reset.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Failed Probes</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of failed probes since monitoring started or statistics were last reset. Increments with each probe failure (timeout, connection refused, etc.). Used as numerator for packet loss percentage calculation. Comparing with Total Probes provides overall interface reliability. Reset to 0 when statistics are reset.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Start Probing</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to start active health check probing for the interface. Activates the asynchronous probe worker thread which will execute probes at the configured interval. Probing continues until explicitly stopped via Stop Probing or the instance is destroyed. Can be called multiple times (idempotent). Safe to call on already-active probing.]]></Description>
+            </Item>
+            <Item ID="21">
+                <Name>Stop Probing</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to stop active health check probing for the interface. Suspends the probe worker thread, no further probes will be executed until Start Probing is called again. Existing statistics and health state are preserved. Useful for temporarily disabling monitoring without destroying the instance configuration. Can be called multiple times (idempotent).]]></Description>
+            </Item>
+            <Item ID="22">
+                <Name>Force Check</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to immediately trigger a health check probe outside the normal interval schedule. Does not affect the regular probe schedule - the next scheduled probe will still occur at the configured interval. Useful for manual verification, troubleshooting, or forcing immediate health state updates after configuration changes. Probe result updates all statistics and health state normally.]]></Description>
+            </Item>
+            <Item ID="23">
+                <Name>Reset Stats</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to reset all statistical counters and measurements to their initial values: Average/Min/Max Latency=0.0, Jitter=0.0, Packet Loss=0.0%, Consecutive Failures/Successes=0, Total Probes=0, Failed Probes=0. Clears latency history used for jitter calculation. Does not affect current health state, probe configuration, or active probing status. Useful after configuration changes or to establish new baseline measurements.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

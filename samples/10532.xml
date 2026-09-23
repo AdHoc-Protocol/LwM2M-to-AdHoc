@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Zigbee Coordinator</Name>
+        <Description1><![CDATA[Zigbee network coordinator management. Network formation, device joining, EZSP/Z-Stack support, and mesh orchestration.]]></Description1>
+        <ObjectID>10532</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10532</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Network State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..5</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current state of the Zigbee network: 0=Offline (coordinator not operational), 1=Forming (creating new network), 2=Joined (joined existing network), 3=Ready (network operational, accepting devices), 4=Leaving (shutting down network), 5=Error (error state requiring attention).]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>PAN ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[16-bit Personal Area Network identifier (0x0000-0xFFFF). Uniquely identifies the Zigbee network. Default 0x1A62. Must be unique within radio range to avoid conflicts with neighboring networks.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Extended PAN ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[64-bit extended PAN identifier in hexadecimal format (16 characters). Provides globally unique network identifier. Used for network selection and joining process. Must be configured before network formation.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Channel</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>11..26</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[802.15.4 radio channel number (11-26 for 2.4GHz band). Channels 11, 15, 20, 25 recommended for minimal Wi-Fi interference. Select based on site survey to avoid congestion. Cannot be changed while network is active.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Network Key</Name>
+                <Operations>W</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Opaque</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[128-bit AES encryption key for network security (16 bytes). Write-only for security. Should be randomly generated for production deployments. Used to encrypt all network traffic. Changing key requires network reformation.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Permit Join Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current permit join status. True when network is accepting new devices, false when closed. Automatically set to false when permit join duration expires. Query this resource to check if joining is currently enabled.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Device Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of devices currently joined to the network (excluding coordinator). Updates automatically when devices join or leave. Maximum depends on coordinator hardware capabilities (typically 100-200 devices).]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Coordinator IEEE Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[64-bit IEEE MAC address of coordinator in hexadecimal format (16 characters). Globally unique identifier burned into coordinator hardware. Used for network security and device binding operations.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Coordinator Type</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..4</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Type of Zigbee coordinator adapter: 0=Unknown, 1=EZSP (Silicon Labs EmberZNet - EFR32), 2=Z-Stack (Texas Instruments - CC2531/CC2652), 3=ConBee (Dresden Elektronik), 4=ZiGate. Detected automatically during initialization.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Firmware Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Coordinator firmware version string. Reports protocol stack version (e.g., "EZSP v8", "Z-Stack 3.0"). Used for compatibility checking and troubleshooting. Update firmware through coordinator-specific tools.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>TX Power</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>-20..20</RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Transmit power in dBm (-20 to +20). Higher values increase range but power consumption. Default 20 dBm. Regional regulations may limit maximum power. Adjust based on deployment environment and regulatory requirements.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Security Level</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..7</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Network security level (0-7). 5 (standard security with encryption and authentication) is default and recommended for production. Level 0 disables security (testing only). Higher levels may impact performance.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Serial Port</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Serial device path for coordinator communication (e.g., "/dev/ttyUSB0", "/dev/ttyACM0"). Must have read/write permissions. Verify path before network formation. Requires restart if changed.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Baud Rate</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>bit/s</Units>
+                <Description><![CDATA[Serial communication baud rate (typically 115200 for EZSP, 115200 for Z-Stack). Must match coordinator configuration. Common values: 9600, 19200, 38400, 57600, 115200. Incorrect baud rate prevents communication.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Route Table Size</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of entries in coordinator route table. Shows active routing paths to devices in mesh network. Larger networks require more route table entries. Monitor for network health assessment.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Neighbor Table Size</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of entries in coordinator neighbor table. Lists directly reachable devices (one-hop neighbors). Important for mesh topology visualization and network planning. High values indicate good coordinator placement.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Form Network</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to form new Zigbee network with current configuration (PAN ID, channel, extended PAN ID). Takes 3-10 seconds. Network must be offline. All devices will need to rejoin if network parameters change.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Leave Network</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to leave current network and shut down coordinator. All devices will lose connectivity. Use before changing network configuration. Network can be reformed with same or different parameters after leaving.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Permit Join Command</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to enable/disable device joining. Argument: duration in seconds (0=disable, 1-254=duration, 255=forever). Recommended: 60-180 seconds for controlled joining. Security risk if left open indefinitely.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Start Touchlink</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to initiate Zigbee Touchlink commissioning (ZLL). Used for adding devices without requiring traditional pairing mode. Device must be within close proximity. Useful for light bulbs and remote controls.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Backup Network</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to backup current network configuration including keys, PAN ID, and device bindings. Enables network restoration after coordinator replacement or failure. Store backup securely due to security key inclusion.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

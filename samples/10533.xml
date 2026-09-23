@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Zigbee Device</Name>
+        <Description1><![CDATA[Individual Zigbee device representation. Device info, status monitoring, ZCL attribute access, and device management.]]></Description1>
+        <ObjectID>10533</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10533</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>IEEE Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[64-bit IEEE MAC address in hexadecimal format (16 characters). Globally unique device identifier burned into hardware. Used for all device communications and binding operations. Never changes during device lifetime.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Network Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[16-bit network address (0x0000-0xFFFF) assigned by coordinator during joining. Used for routing within network. May change if device rejoins or network performs address reassignment. 0xFFFF indicates unassigned.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Device Type</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..4</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Zigbee device type: 0=Unknown, 1=Coordinator, 2=Router (mains-powered, extends network), 3=End Device (battery or mains, doesn't route), 4=Sleepy End Device (battery-powered, low power mode). Determines routing and power management behavior.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Manufacturer</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Manufacturer name read from device Basic cluster (ZCL attribute 0x0004). May be empty if device doesn't support this attribute or hasn't been interviewed. Used for device identification and compatibility checking.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Model</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Model identifier read from device Basic cluster (ZCL attribute 0x0005). Specific product model name or number. Used for device-specific features and troubleshooting. May be empty if not supported.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Firmware Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Device firmware version read from Basic cluster. Used for OTA upgrade management and compatibility checking. Format varies by manufacturer. Monitor for available updates.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Power Source</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Device power source: 0=Unknown, 1=Mains (AC powered, always on), 2=Battery (portable, may sleep), 3=DC (external DC supply). Affects polling strategy and sleep behavior. Battery devices require poll control for timely updates.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>LQI</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..255</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Link Quality Indicator (0-255). Measures communication quality between device and coordinator/parent. Higher is better. <50=poor, 50-150=fair, 150-200=good, >200=excellent. Monitor for connectivity issues.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>RSSI</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>-100..0</RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Received Signal Strength Indicator in dBm. Negative values, closer to 0 is stronger. >-70=excellent, -70 to -80=good, -80 to -90=fair, <-90=poor. Use for network planning and troubleshooting.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Last Seen</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Timestamp of last communication from device (Unix epoch). Updated on any message reception. Used to detect offline devices. Devices not seen for >5 minutes may be offline. Battery devices may report infrequently.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Endpoints</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..254</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Active endpoint numbers (1-254). Each endpoint represents a logical device function (e.g., endpoint 1=main light, endpoint 2=button). Discovered during interview. Multiple endpoints enable complex multi-function devices.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Clusters</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[JSON array of supported ZCL clusters by endpoint. Format: [{"endpoint":1,"in":[0,3,4,5,6],"out":[]}]. "in" clusters are server (device provides), "out" are client (device controls). Determines device capabilities.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Interviewed</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Interview completion status. True when device capabilities have been fully discovered (endpoints, clusters, attributes). False for newly joined devices awaiting interview. Trigger interview manually if needed.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Online</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current online status. True if device responded recently (within last 5 minutes). False if offline/unreachable. Battery devices may appear offline between poll intervals. Use Ping command to verify.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Profile ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Zigbee profile ID. Common values: 0x0104=Home Automation, 0xC05E=Light Link, 0x0109=Smart Energy, 0xA1E0=Green Power. Determines which clusters and features are available. Most devices use Home Automation profile.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Device ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Zigbee device identifier within profile. Examples: 0x0100=On/Off Light, 0x0101=Dimmable Light, 0x010D=Extended Color Light, 0x0302=Temperature Sensor, 0x0402=IAS Zone. Indicates device function and required clusters.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Remove</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to remove device from network. Sends leave request to device and removes from coordinator database. Device must be factory reset to rejoin. Use for decommissioning devices or clearing failed joins.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Interview</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to start device interview process. Queries endpoints, clusters, and basic attributes. Takes 5-30 seconds. Automatically performed on join but can be triggered manually if initial interview fails or device capabilities change.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Ping</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to ping device and verify connectivity. Updates Last Seen timestamp and Online status. Useful for checking battery devices or troubleshooting connectivity issues. Returns success if device responds.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Read Attribute</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to read ZCL attribute from device. Argument format: [endpoint][clusterId][attributeId] (5 bytes). Example: Read OnOff state: [01][0006][0000]. Returns attribute value. Used for querying device state.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Write Attribute</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to write ZCL attribute to device. Argument format: [endpoint][clusterId][attributeId][dataType][value]. Example: Set level to 128: [01][0008][0000][20][80]. Used for device configuration and control.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

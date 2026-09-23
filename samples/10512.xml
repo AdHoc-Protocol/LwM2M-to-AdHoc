@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Starlink Terminal</Name>
+        <Description1><![CDATA[This LwM2M Object provides comprehensive management and monitoring of Starlink Gen3 satellite internet terminals. It enables remote access to telemetry, configuration, and control of Starlink dishes, including obstruction monitoring, alignment tracking, speed testing, and performance metrics. The object interfaces with the Starlink terminal via gRPC protocol (default endpoint: 192.168.100.1:9200).]]></Description1>
+        <ObjectID>10512</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10512</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <!-- Device Information (0-9) -->
+            <Item ID="0">
+                <Name>Device ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Starlink terminal serial number uniquely identifying the dish hardware.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Hardware Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Terminal hardware version string (e.g., "rev3_proto2").]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Software Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Currently installed firmware version on the terminal.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Connection State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current connection state: CONNECTED, SEARCHING, BOOTING, STOWED, THERMAL_SHUTDOWN, NO_SATS, OBSTRUCTED, NO_DOWNLINK, NO_PINGS, or UNKNOWN.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Uptime</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Seconds since the terminal last rebooted.]]></Description>
+            </Item>
+
+            <!-- Network Performance & Status (10-29) -->
+            <Item ID="10">
+                <Name>Downlink Throughput</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B/s</Units>
+                <Description><![CDATA[Current download speed in bits per second.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Uplink Throughput</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B/s</Units>
+                <Description><![CDATA[Current upload speed in bits per second.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>POP Ping Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Round-trip latency to the Point of Presence in milliseconds.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>POP Ping Drop Rate</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0.0..1.0</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Packet loss fraction from 0.0 (no loss) to 1.0 (total loss).]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Seconds To First Slot</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Estimated seconds until next satellite becomes available.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>SNR</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>dB</Units>
+                <Description><![CDATA[Current signal-to-noise ratio in decibels.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Is SNR Above Noise Floor</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[True if SNR is above 3dB threshold indicating good signal quality.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Download Usage</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total bytes downloaded since last counter reset.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Upload Usage</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total bytes uploaded since last counter reset.]]></Description>
+            </Item>
+
+            <!-- Obstruction Monitoring (30-39) -->
+            <Item ID="30">
+                <Name>Fraction Obstructed</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0.0..1.0</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Fraction of sky view obstructed from 0.0 (clear) to 1.0 (fully blocked).]]></Description>
+            </Item>
+            <Item ID="31">
+                <Name>Currently Obstructed</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[True if satellite view is currently obstructed.]]></Description>
+            </Item>
+            <Item ID="32">
+                <Name>Obstruction Duration</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Average duration of prolonged obstruction events in seconds.]]></Description>
+            </Item>
+            <Item ID="33">
+                <Name>Obstruction Interval</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Average time between obstruction events in seconds.]]></Description>
+            </Item>
+            <Item ID="34">
+                <Name>Obstruction Valid Seconds</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Number of seconds of valid obstruction data collected.]]></Description>
+            </Item>
+            <Item ID="35">
+                <Name>Wedges Fraction Obstructed</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[JSON array of 12 obstruction fractions for each 30-degree wedge of the sky view.]]></Description>
+            </Item>
+
+            <!-- Dish Alignment (40-49) -->
+            <Item ID="40">
+                <Name>Direction Azimuth</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..360</RangeEnumeration>
+                <Units>deg</Units>
+                <Description><![CDATA[Dish azimuth pointing direction in degrees (0=North, 90=East, 180=South, 270=West).]]></Description>
+            </Item>
+            <Item ID="41">
+                <Name>Direction Elevation</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..90</RangeEnumeration>
+                <Units>deg</Units>
+                <Description><![CDATA[Dish elevation angle in degrees (0=horizontal, 90=vertical).]]></Description>
+            </Item>
+            <Item ID="42">
+                <Name>Dish Stowed</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Get/set stow state. Write true to stow dish for transport, false to unstow for operation.]]></Description>
+            </Item>
+            <Item ID="43">
+                <Name>Dish Alignment Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable alignment status message.]]></Description>
+            </Item>
+
+            <!-- Alert System (50-66) -->
+            <Item ID="50">
+                <Name>Alerts Bitmap</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Combined alert flags as bit field. Each bit represents a specific alert condition.]]></Description>
+            </Item>
+            <Item ID="51">
+                <Name>Alert Motors Stuck</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Dish motors are stuck and cannot move.]]></Description>
+            </Item>
+            <Item ID="52">
+                <Name>Alert Thermal Shutdown</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Thermal shutdown triggered due to overheating.]]></Description>
+            </Item>
+            <Item ID="53">
+                <Name>Alert Thermal Throttle</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Performance throttled due to thermal conditions.]]></Description>
+            </Item>
+            <Item ID="54">
+                <Name>Alert Unexpected Location</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Dish detected at unexpected geographic location.]]></Description>
+            </Item>
+            <Item ID="55">
+                <Name>Alert Mast Not Vertical</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Mounting mast is not near vertical position.]]></Description>
+            </Item>
+            <Item ID="56">
+                <Name>Alert Slow Ethernet</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Ethernet connection speed is below expected.]]></Description>
+            </Item>
+            <Item ID="57">
+                <Name>Alert Roaming</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Terminal is roaming outside home service area.]]></Description>
+            </Item>
+            <Item ID="58">
+                <Name>Alert Install Pending</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Installation is pending completion.]]></Description>
+            </Item>
+            <Item ID="59">
+                <Name>Alert Is Heating</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Dish heater is actively running (cold weather operation).]]></Description>
+            </Item>
+            <Item ID="60">
+                <Name>Alert Power Supply Throttle</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Power supply thermal throttling active.]]></Description>
+            </Item>
+            <Item ID="61">
+                <Name>Alert Is Power Save Idle</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Terminal in power saving idle mode.]]></Description>
+            </Item>
+            <Item ID="62">
+                <Name>Alert Low Motor Current</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Motor current below expected levels.]]></Description>
+            </Item>
+            <Item ID="63">
+                <Name>Alert Lower Signal</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Signal strength lower than predicted for current conditions.]]></Description>
+            </Item>
+            <Item ID="64">
+                <Name>Alert Obstruction Map Reset</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Obstruction map has been reset and is rebuilding.]]></Description>
+            </Item>
+            <Item ID="65">
+                <Name>Alert Dish Water Detected</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Water detected in dish enclosure.]]></Description>
+            </Item>
+            <Item ID="66">
+                <Name>Alert Router Water Detected</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Alert: Water detected in router enclosure.]]></Description>
+            </Item>
+
+            <!-- GPS Location (80-85) -->
+            <Item ID="80">
+                <Name>GPS Ready</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[True when GPS position fix is available and valid.]]></Description>
+            </Item>
+            <Item ID="81">
+                <Name>GPS Enabled</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[True if GPS functionality is enabled on the terminal.]]></Description>
+            </Item>
+            <Item ID="82">
+                <Name>GPS Satellites</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of GPS satellites currently in use for position fix.]]></Description>
+            </Item>
+            <Item ID="83">
+                <Name>Latitude</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>-90..90</RangeEnumeration>
+                <Units>deg</Units>
+                <Description><![CDATA[Current latitude in decimal degrees (WGS84).]]></Description>
+            </Item>
+            <Item ID="84">
+                <Name>Longitude</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>-180..180</RangeEnumeration>
+                <Units>deg</Units>
+                <Description><![CDATA[Current longitude in decimal degrees (WGS84).]]></Description>
+            </Item>
+            <Item ID="85">
+                <Name>Altitude</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[Current altitude above sea level in meters.]]></Description>
+            </Item>
+
+            <!-- Power Management (90-94) -->
+            <Item ID="90">
+                <Name>Latest Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Most recent instantaneous power consumption measurement.]]></Description>
+            </Item>
+            <Item ID="91">
+                <Name>Mean Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Average power consumption over monitoring period.]]></Description>
+            </Item>
+            <Item ID="92">
+                <Name>Min Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Minimum power consumption observed during monitoring period.]]></Description>
+            </Item>
+            <Item ID="93">
+                <Name>Max Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Maximum power consumption observed during monitoring period.]]></Description>
+            </Item>
+            <Item ID="94">
+                <Name>Total Energy</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>kWh</Units>
+                <Description><![CDATA[Cumulative energy consumed since counter reset in kilowatt-hours.]]></Description>
+            </Item>
+
+            <!-- Control Actions (100-107) -->
+            <Item ID="100">
+                <Name>Reboot Terminal</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to reboot the Starlink terminal.]]></Description>
+            </Item>
+            <Item ID="101">
+                <Name>Start Speedtest</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to initiate a speed test. Results available in Speedtest Status (102).]]></Description>
+            </Item>
+            <Item ID="102">
+                <Name>Speedtest Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Speed test status and results in JSON format.]]></Description>
+            </Item>
+            <Item ID="103">
+                <Name>Factory Reset</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to perform factory reset of the terminal. This will erase all configuration.]]></Description>
+            </Item>
+            <Item ID="104">
+                <Name>Get Obstruction Map</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to retrieve current obstruction map. Data available in Obstruction Map Data (105).]]></Description>
+            </Item>
+            <Item ID="105">
+                <Name>Obstruction Map Data</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Opaque</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Binary obstruction map data retrieved via Get Obstruction Map action.]]></Description>
+            </Item>
+            <Item ID="106">
+                <Name>Refresh Telemetry</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to force immediate telemetry refresh from the terminal.]]></Description>
+            </Item>
+            <Item ID="107">
+                <Name>gRPC Endpoint</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[gRPC endpoint address for Starlink terminal communication. Default: "192.168.100.1:9200".]]></Description>
+            </Item>
+
+            <!-- Historical Data (110-119) -->
+            <Item ID="110">
+                <Name>History Samples</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of historical samples available in current data set.]]></Description>
+            </Item>
+            <Item ID="111">
+                <Name>History Interval</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Time interval between historical samples in seconds.]]></Description>
+            </Item>
+            <Item ID="112">
+                <Name>Mean Ping Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Mean latency across all historical samples including those with packet loss.]]></Description>
+            </Item>
+            <Item ID="113">
+                <Name>Mean Full Ping Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Mean latency considering only samples with zero packet loss.]]></Description>
+            </Item>
+            <Item ID="114">
+                <Name>Stdev Full Ping Latency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>ms</Units>
+                <Description><![CDATA[Standard deviation of latency for zero-loss samples.]]></Description>
+            </Item>
+            <Item ID="115">
+                <Name>Total Ping Drop</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total fraction of sample intervals experiencing packet loss.]]></Description>
+            </Item>
+            <Item ID="116">
+                <Name>Count Full Ping Drop</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of samples with 100% packet loss.]]></Description>
+            </Item>
+            <Item ID="117">
+                <Name>Count Obstructed</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of samples marked as obstructed.]]></Description>
+            </Item>
+            <Item ID="118">
+                <Name>Latency Deciles</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[JSON array containing latency distribution by deciles (10th, 20th, ... 90th percentile).]]></Description>
+            </Item>
+            <Item ID="119">
+                <Name>Load Bucket Stats</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[JSON formatted statistics about network load distribution across time buckets.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>WiFi Channel Optimization</Name>
+        <Description1><![CDATA[WiFi channel selection and optimization. Interference monitoring, automatic channel selection, and DFS management.]]></Description1>
+        <ObjectID>10528</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10528</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Interface</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Wireless interface identifier (e.g., "radio0", "radio1"). Specifies which wireless radio this instance manages. Typically "radio0" for 2.4GHz and "radio1" for 5GHz on dual-band routers. Must match the interface name in OpenWRT's wireless configuration.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Current Channel</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current operating channel number. For 2.4GHz: 1-14 (typically 1-11 in US). For 5GHz: 36-165 in increments of 4 (e.g., 36, 40, 44, 48, 149, 153, 157, 161, 165). For 6GHz: 1-233. Read-only resource that reflects the active channel. Value 0 indicates channel not yet initialized.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Current Width</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>20,40,80,160</RangeEnumeration>
+                <Units>MHz</Units>
+                <Description><![CDATA[Current channel bandwidth in MHz. Supported values: 20 (basic), 40 (HT40/VHT40), 80 (VHT80/HE80), 160 (VHT160/HE160). Wider channels provide higher throughput but require more spectrum and are more susceptible to interference. 2.4GHz typically uses 20 or 40MHz. 5GHz and 6GHz support all widths.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Auto Channel</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable Automatic Channel Selection (ACS). When enabled (true), the system will automatically select and switch to the optimal channel based on the ACS algorithm when "Optimize Channel" is executed. When disabled (false), channel changes must be performed manually via the "Set Channel" resource.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Scan Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>60..86400</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Interval in seconds between automatic channel scans (range: 60-86400 seconds / 1 minute to 24 hours). Periodic scans update channel survey data, neighbor AP counts, and interference metrics. Shorter intervals provide more current data but increase system load. Recommended: 3600 seconds (1 hour) for typical deployments. Set to 0 to disable automatic scanning.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Neighboring APs</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total count of neighboring access points detected during the last scan across all channels. High neighbor counts indicate congested RF environment. This metric helps assess overall spectrum congestion and inform channel selection decisions. Updated after each scan operation.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Channel Utilization</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..100</RangeEnumeration>
+                <Units>%</Units>
+                <Description><![CDATA[Current channel busy time as a percentage (0-100%). Represents the proportion of time the channel is occupied by any RF activity including this AP, clients, neighboring APs, and interference. Values above 70% indicate high congestion. Measured via iw survey dump. Critical metric for channel optimization decisions.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Noise Floor</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Background noise level on the current channel in dBm (typically -95 to -75 dBm). Lower (more negative) values indicate cleaner spectrum. Good: -95 to -90 dBm. Fair: -90 to -85 dBm. Poor: -85 to -75 dBm. High noise floors reduce signal-to-noise ratio and degrade performance. Measured via iw survey dump.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Interference Level</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Composite interference score (0-100) calculated from neighboring AP count, channel utilization, and noise floor. 0 = no interference, 100 = severe interference. Algorithm weights: neighbors (40%), utilization (40%), noise (20%). Values above 60 indicate significant interference requiring channel change. Used by ACS for channel scoring.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>DFS Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable Dynamic Frequency Selection (DFS) support. When enabled (true), the router can use DFS channels (52-144 in 5GHz band) which are less congested but require radar detection. DFS channels undergo Channel Availability Check (CAC) before use and must be vacated if radar is detected. Enable for better channel selection in congested areas. Regulatory requirement in many regions for 5GHz operation.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>DFS State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current DFS operational state for DFS channels: "CAC" (Channel Availability Check in progress, 60-600 seconds depending on region), "Available" (channel cleared for use after CAC or non-DFS channel), "NOP" (Non-Occupancy Period, channel unavailable for 30 minutes after radar detection), "Disabled" (DFS not enabled). Only applicable when DFS Enabled is true and operating on DFS channels.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Radar Detected</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Indicates whether radar has been detected on the current DFS channel (true) or not (false). When radar is detected, the channel enters Non-Occupancy Period (NOP) and cannot be used for 30 minutes. The router must immediately vacate the channel and switch to a non-DFS or CAC-cleared DFS channel. Automatically cleared when switching channels or after NOP expires.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Best 2.4G Channel</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..14</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Recommended optimal channel for 2.4GHz band (1-14, typically 1, 6, or 11 for non-overlapping channels in US). Calculated by ACS algorithm based on latest scan data including neighbor count, utilization, and interference. Updated after each optimization run. Use this value for manual channel changes or automatic selection when Auto Channel is enabled on a 2.4GHz radio.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Best 5G Channel</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>36..165</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Recommended optimal channel for 5GHz band (36-165). Calculated by ACS algorithm considering all available 5GHz channels including DFS channels if enabled. Takes into account neighbor interference, utilization, noise floor, DFS requirements, and historical performance. Updated after each optimization run. May recommend DFS channels (52-144) if DFS is enabled and spectrum is congested on non-DFS channels.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Best 6G Channel</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..233</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Recommended optimal channel for 6GHz band (1-233). Calculated by ACS algorithm for WiFi 6E capable radios. 6GHz band offers more clean spectrum with less congestion due to newer deployment. Takes into account the wider channel availability and lower interference typical of 6GHz. Updated after each optimization run. Value 0 indicates 6GHz not supported or not scanned.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Channel Survey</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Detailed per-channel survey data in format "channel:busy_time:noise_floor" (e.g., "36:450:92" means channel 36 with 450ms busy time and -92 dBm noise). Multiple instances provide survey data for all scanned channels. Busy time in milliseconds, noise floor in dBm. Collected via iw survey dump. Used by ACS algorithm for detailed channel analysis. Updated after each scan operation.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Last Scan Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of the last completed channel scan. Indicates the freshness of channel survey data, neighbor AP counts, and interference metrics. Compare with current time to determine data age. Updated after "Scan Now" execution or periodic automatic scans. Value 0 indicates no scan has been performed since initialization.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Last Optimization</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of the last channel optimization run. Indicates when the ACS algorithm was last executed and channel recommendations were updated. If Auto Channel is enabled, this also reflects the last automatic channel change. Compare with Last Scan Time to verify optimization used current data. Value 0 indicates no optimization has been performed since initialization.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Scan Now</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to immediately perform a channel scan and survey. Updates Channel Survey, Neighboring APs, Channel Utilization, Noise Floor, and Interference Level resources with current RF environment data. Scan operation may take 5-30 seconds depending on number of channels. Non-disruptive to connected clients. Does not change channels. Use before manual channel changes or to get current spectrum status.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Optimize Channel</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to run the Automatic Channel Selection (ACS) algorithm. Performs a full channel scan, analyzes all available channels using the ACS scoring algorithm, and updates Best Channel recommendations for all bands. If Auto Channel is enabled, automatically switches to the optimal channel. Otherwise, only updates recommendations. ACS algorithm considers neighbor count, utilization, noise floor, DFS requirements, and historical performance. May cause brief client disconnection if channel change occurs.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Set Channel</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to manually set the wireless channel. Argument format: "channel:width" (e.g., "36:80" for channel 36 with 80MHz width) or just "channel" (e.g., "36" to keep current width). Immediately applies the channel change and reloads wireless configuration. Causes brief client disconnection (typically 1-3 seconds). Validates channel number and width. For DFS channels, triggers Channel Availability Check (CAC). Updates Current Channel and Current Width resources.]]></Description>
+            </Item>
+            <Item ID="21">
+                <Name>Enable DFS</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to enable Dynamic Frequency Selection (DFS) support on this radio. Updates OpenWRT wireless configuration to enable DFS, sets DFS Enabled to true, and reloads wireless. Enables the router to use DFS channels (52-144 in 5GHz) which are typically less congested. After enabling, use Optimize Channel to select the best channel including DFS options. Required for regulatory compliance in many regions for full 5GHz spectrum access.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

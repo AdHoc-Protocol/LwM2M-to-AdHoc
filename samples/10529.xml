@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Matter Bridge</Name>
+        <Description1><![CDATA[Matter protocol bridge functionality. Enables LwM2M-managed gateways to expose devices to Matter fabric ecosystems.]]></Description1>
+        <ObjectID>10529</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10529</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Controller Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current status of the Matter controller. Values include: "Inactive" (not initialized), "Active" (running and ready), "Commissioning" (device commissioning in progress), "Error: [message]" (error state with details). Updated automatically during controller operations and commissioning workflows. Check this resource after executing controller operations to verify success. In stub mode without Matter SDK, status will indicate "Active (stub mode)".]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Commissioned Devices Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of Matter devices currently commissioned to this controller's fabric. Includes all device types (lights, sensors, locks, etc.). Updated automatically when devices are commissioned or removed. Each commissioned device creates a corresponding Matter Device Object (33451) instance. Value persists across controller restarts as devices are stored in persistent storage. Use this to monitor fabric size and detect unexpected device removals.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Thread Network SSID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread network name for Border Router functionality. Used when commissioning Thread-based Matter devices. Maximum 16 characters, alphanumeric. When Thread Border Router is enabled, this name identifies the Thread network that commissioned devices will join. Must be set before enabling Thread Border Router. Empty when Thread functionality is not in use. Example values: "matter-thread", "home-thread-001".]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Thread Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Indicates whether Thread Border Router functionality is enabled. When true, the controller can commission and communicate with Thread-based Matter devices. When false, only IP-based (WiFi/Ethernet) Matter devices are supported. Set to true using the Enable Thread BR execute resource. Requires proper Thread network configuration in Thread Network Object (33452). Thread support requires compatible hardware and Thread stack availability.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Fabric ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unique identifier for this Matter fabric. Generated during controller initialization using fabric index, timestamp, and cryptographic elements. Format: hex string representation of 64-bit fabric ID. All devices commissioned to this controller share this fabric ID. Used for secure session establishment (CASE) and operational discovery. Persists across controller restarts. Essential for multi-fabric Matter deployments to identify which fabric a controller manages.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Vendor ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Matter Vendor ID for this controller. 16-bit value assigned by CSA (Connectivity Standards Alliance). Default: 0xFFF1 (test vendor ID for development). Production deployments must use officially assigned vendor ID. Used during device commissioning and attestation. Visible to commissioned devices. Must be set before controller initialization. Changes require controller restart to take effect.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Product ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Matter Product ID for this controller. 16-bit value defined by vendor. Default: 0x8000 (test product ID for development). Used to identify specific controller product during commissioning. Visible to commissioned devices. Can be used by devices for controller-specific behavior. Must be set before controller initialization. Changes require controller restart to take effect.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Commission Device</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to commission a new Matter device to this controller's fabric. Argument: QR code payload (format: "MT:...") or manual pairing code (11-21 digit string). Initiates full commissioning workflow: device discovery (BLE/WiFi/Thread), PASE session establishment, device attestation verification, network credential provisioning, operational discovery, and CASE session setup. Progress updates reported via Controller Status resource. On success, creates new Matter Device Object (33451) instance. Typical duration: 30-120 seconds depending on device type and network. Example QR: "MT:Y.K9042C00KA0648G00", Example manual code: "34970112332".]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Remove Device</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to remove a commissioned Matter device from this controller's fabric. Argument: Node ID as hex string (e.g., "0000000000000001"). Closes active CASE sessions, removes device from fabric, deletes operational credentials, and removes corresponding Matter Device Object (33451) instance. Device must be recommissioned to rejoin the fabric. Updates Commissioned Devices Count. Persists removal across controller restarts. Use when decommissioning devices or troubleshooting device communication issues.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Discover Devices</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to start Matter device discovery. Scans for uncommissioned devices using BLE, mDNS (operational discovery), and Thread (if enabled). Default timeout: 30 seconds. Discovered devices are logged but not automatically commissioned. Use before commissioning to verify device visibility. Discovery results include: vendor ID, product ID, discriminator, device name. Does not modify controller state. Can be executed while other operations are in progress. Useful for diagnostics and device identification.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Enable Thread BR</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to enable Thread Border Router functionality. Requires Thread network configuration in Thread Network Object (33452). Creates Thread network using configured parameters (network name, PAN ID, channel, keys). Starts Border Router services for Thread routing, external commissioning, and service discovery. Sets Thread Enabled to true. Essential for commissioning Thread-based Matter devices (door locks, sensors, battery-powered devices). Requires compatible hardware with Thread radio. Check Thread Network Object Border Router State for status.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

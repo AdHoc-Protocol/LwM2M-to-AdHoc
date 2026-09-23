@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>LAN Configuration</Name>
+        <Description1><![CDATA[LAN network configuration. DHCP server settings, IP ranges, DNS relay, and client lease management.]]></Description1>
+        <ObjectID>10535</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10535</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>LAN IP Address</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[IPv4 address of the LAN interface (e.g., "192.168.1.1"). This is the router's IP address on the local network and serves as the default gateway for LAN clients. Must be a valid IPv4 address in dotted-decimal notation.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Subnet Mask</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Subnet mask for the LAN network in dotted-decimal notation (e.g., "255.255.255.0" for a /24 network). Defines the size of the local network and which IP addresses are considered part of the LAN segment. Must be a valid subnet mask with contiguous 1 bits.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>DHCP Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable the DHCP server on this LAN interface. When enabled (true), the router will automatically assign IP addresses to clients from the configured DHCP pool. When disabled (false), clients must use static IP configuration.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>DHCP Pool Start</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Starting IP address of the DHCP address pool (e.g., "192.168.1.100"). This is the first IP address that can be dynamically assigned to DHCP clients. Must be within the LAN subnet and not conflict with the router's IP or static assignments.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>DHCP Pool End</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Ending IP address of the DHCP address pool (e.g., "192.168.1.250"). This is the last IP address that can be dynamically assigned to DHCP clients. Must be within the LAN subnet and greater than or equal to the pool start address.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>DHCP Lease Time</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>60..604800</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Duration in seconds for which a DHCP lease remains valid (range: 60-604800 seconds / 1 minute to 7 days). After this time, clients must renew their lease or obtain a new IP address. Common values: 43200 (12 hours), 86400 (24 hours). Shorter lease times allow for more dynamic network management but increase DHCP traffic.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>DNS Server Primary</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Primary DNS server IP address provided to DHCP clients (e.g., "8.8.8.8" for Google DNS). Clients will use this server for domain name resolution. Can be set to the router's IP if it provides DNS caching/forwarding, or to an external DNS service.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>DNS Server Secondary</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Secondary/fallback DNS server IP address provided to DHCP clients (e.g., "8.8.4.4"). Used by clients when the primary DNS server is unavailable. Provides redundancy for DNS resolution.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Domain Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Local domain name suffix for the LAN (e.g., "lan", "home.local"). This domain is appended to hostnames for local name resolution and provided to DHCP clients. Allows clients to resolve local hostnames like "device.lan" instead of using IP addresses.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Static Leases</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Static DHCP lease reservations in MAC:IP format (e.g., "00:11:22:33:44:55:192.168.1.50"). Associates a specific MAC address with a fixed IP address, ensuring that a device always receives the same IP. Useful for servers, printers, and other devices requiring consistent addressing. Multiple instances can be added for different devices.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Active Leases</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Currently active DHCP leases in MAC:IP:hostname:expiry format (e.g., "00:11:22:33:44:55:192.168.1.100:laptop:3600"). Read-only resource that shows all devices currently holding DHCP leases, including their MAC address, assigned IP, hostname (if available), and remaining lease time in seconds. Automatically updated from the DHCP server's lease database.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Apply Configuration</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to apply the current LAN and DHCP configuration to the system. Writes all configured settings to OpenWRT's UCI configuration files (/etc/config/network and /etc/config/dhcp), commits the changes, and restarts the network and dnsmasq services to activate the new configuration. After execution, the Configuration Status resource will indicate success or failure.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Configuration Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current status of the LAN configuration: 0=Pending (configuration modified but not yet applied), 1=Applied (configuration successfully applied to the system), 2=Error (last configuration apply attempt failed). Check this resource after executing Apply Configuration to verify successful application.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

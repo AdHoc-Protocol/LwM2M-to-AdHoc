@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Routing Table</Name>
+        <Description1><![CDATA[IP routing table management. Static routes, default gateway, policy-based routing, and route metrics.]]></Description1>
+        <ObjectID>10536</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10536</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Destination Network</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Destination network in CIDR notation or IP address (e.g., "192.168.1.0/24", "0.0.0.0/0" for default route, or "2001:db8::/32" for IPv6). Supports both IPv4 and IPv6 addressing. Use "default" or "0.0.0.0/0" for the default gateway route. This defines the target network or host that this routing entry will match.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Netmask/Prefix</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Network mask in dotted-decimal notation (e.g., "255.255.255.0") or prefix length (e.g., "24"). For IPv4, valid netmasks range from /0 to /32. For IPv6, valid prefixes range from /0 to /128. If the Destination Network resource uses CIDR notation, this resource is optional and will be derived automatically. Used to define the subnet size for the routing entry.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Gateway</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Next-hop gateway IP address for this route (e.g., "192.168.1.1" for IPv4 or "fe80::1" for IPv6). This is the IP address of the router or gateway that packets should be forwarded to in order to reach the destination network. Optional for directly connected networks. Leave empty or set to "0.0.0.0" for on-link routes.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Interface</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Network interface name through which the route is accessible (e.g., "eth0", "eth1", "wlan0", "br-lan"). Must be a valid interface name present on the system. This specifies the physical or virtual network interface that will be used to forward packets to the destination or gateway. Maximum length: 16 characters.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Metric</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Route metric/priority value (range: 0-65535). Lower values indicate higher priority routes. When multiple routes exist to the same destination, the route with the lowest metric is preferred. Default value is typically 0 or 100. Used for route selection and failover scenarios. Essential for implementing redundant paths and load balancing.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Protocol</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..5</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Route protocol/origin identifier (read-only): 0=Unspecified, 1=ICMP Redirect, 2=Kernel (added by kernel during autoconfiguration), 3=Boot (added during system boot), 4=Static (manually configured static route), 5=DHCP (received via DHCP). Indicates how the route was learned or configured. Useful for route filtering and policy decisions.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current route state (read-only): 0=Down (route is inactive or interface is down), 1=Up (route is active and operational), 2=Unreachable (destination is unreachable due to network conditions). Automatically updated based on kernel routing table status and interface state. Monitor this resource to detect routing failures or network connectivity issues.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Table</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..255</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Routing table ID for policy-based routing (range: 0-255). Common values: 254=Main routing table (default), 255=Local routing table (link-local routes), 1-253=Custom routing tables for policy-based routing. Allows implementation of advanced routing policies where different routing tables are selected based on source address, interface, or other criteria. See /etc/iproute2/rt_tables for table name mappings.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Scope</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..254</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Route scope defining the distance to the destination: 0=Global (route to destinations beyond the local network, requires gateway), 253=Link (route valid only on directly attached network segment, no gateway needed), 254=Host (route to a local host address). Scope affects route selection and determines whether a gateway is required. Default is Global (0) for most routes.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>MTU</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>68..65535</RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Maximum Transmission Unit in bytes for this route (range: 68-65535). Defines the largest packet size that can be transmitted without fragmentation. Default is typically 1500 for Ethernet. Smaller values may be needed for tunnels, VPNs, or networks with MTU constraints. Setting this value overrides the interface default MTU for packets using this route. Useful for Path MTU Discovery optimization.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Add Route</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to add the configured route to the kernel routing table. Uses the 'ip route add' command to create the route based on the configured destination, netmask, gateway, interface, metric, table, and other parameters. If the route already exists, the operation will succeed without modification. Optionally saves the route to UCI configuration for persistence across reboots. After execution, check the State resource to verify the route was added successfully (State=1).]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Delete Route</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to remove the configured route from the kernel routing table. Uses the 'ip route del' command to delete the route matching the configured destination network and table ID. If the route does not exist, the operation will succeed without error. The route will remain in the instance configuration but will be marked as State=0 (Down). To permanently remove the route, delete the LwM2M object instance after executing this resource.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Flush Routes</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to flush (remove) all routes from the specified routing table. Uses the 'ip route flush table <table_id>' command to clear all entries from the routing table specified in the Table resource. WARNING: This is a destructive operation that will remove all routes in the table, potentially causing loss of network connectivity. Use with caution, especially on the main routing table (254). Typically used for table cleanup or before applying a complete new routing configuration.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Reload Routes</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to reload and synchronize the instance's route configuration from the kernel routing table. Uses the 'ip route show' command to query current routes and updates all resource values (destination, gateway, interface, metric, state, etc.) to match the kernel state. Useful for detecting external changes to the routing table made by other processes or for recovering from synchronization errors. Does not modify the kernel routing table, only updates the LwM2M object instance to reflect current reality.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

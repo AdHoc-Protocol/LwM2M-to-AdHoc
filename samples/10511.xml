@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--Copyright 2025 AVSystem.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its
+contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.-->
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M-v1_1.xsd">
+  <Object ObjectType="MODefinition">
+    <Name>Cellular Connectivity Diagnostics</Name>
+    <Description1>Provides standardized diagnostic information about the current cellular connection, including serving cell identifiers, PLMN details, signal quality metrics, and SIM/eSIM parameters to support interoperability and troubleshooting.</Description1>
+    <ObjectID>10511</ObjectID>
+    <ObjectURN>urn:oma:lwm2m:x:10511</ObjectURN>
+    <LWM2MVersion>1.2</LWM2MVersion>
+    <ObjectVersion>1.0</ObjectVersion>
+    <MultipleInstances>Multiple</MultipleInstances>
+    <Mandatory>Optional</Mandatory>
+    <Resources>
+      <!-- Identifiers -->
+      <Item ID="0">
+        <Name>MCC</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..999</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Mobile Country Code (MCC) of the registered PLMN. ITU-T E.212: "The MCC consists of three decimal digits identifying the country of domicile of the mobile subscriber." (e.g., 262 = Germany). Range: 000-999.]]></Description>
+      </Item>
+      <Item ID="1">
+        <Name>MNC</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..999</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Mobile Network Code (MNC) of the registered PLMN. ITU-T E.212: "The Mobile Network Code consists of two or three decimal digits and identifies the home PLMN of the subscriber within a country."(e.g., 01 = Telekom DE). Must be used together with MCC.
+ Range: 00-999.]]></Description>
+      </Item>
+      <Item ID="2">
+        <Name>Serving Cell ID</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..68719476735</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Identifier of the serving cell. 3GPP TS 36.331/38.331: "CellIdentity: Identity of the cell, within the PLMN, in E-UTRA a 28-bit value (ECI); in NR a 36-bit value (NCI)." Range: LTE 0-268435455; NR up to 68719476735.]]></Description>
+      </Item>
+      <Item ID="3">
+        <Name>Tracking Area Code</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..65535</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Area Code identifying the UE’s registration area within a PLMN. 
+Interpretation depends on the Network Bearer (Resource ID: 4):
+- GSM/UMTS (2G/3G): Location Area Code (LAC), 16-bit identifier of the Location Area.
+- LTE/NR (4G/5G): Tracking Area Code (TAC), 16-bit identifier of the Tracking Area.
+Both LAC and TAC are defined in 3GPP TS 23.003 and share the same numeric range (0-65535).]]></Description>
+      </Item>
+
+      <!-- Network Information -->
+      <Item ID="4">
+        <Name>Network Bearer</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..50</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Indicates the network bearer used for the current LwM2M communication session from the network bearer list below.
+The number range is split into three categories:
+0 - 20 are Cellular Bearers
+21 - 40 are Wireless Bearers
+41 - 50 are Wireline Bearers
+More specifically:
+0: GSM cellular network
+1: TD-SCDMA cellular network
+2: WCDMA cellular network
+3: CDMA2000 cellular network
+4: WiMAX cellular network
+5: LTE-TDD cellular network
+6: LTE-FDD cellular network
+7: NB-IoT
+8: 5G-NR TDD
+9: 5G-NR FDD
+10 - 20: Reserved for other types of cellular network
+21: WLAN network
+22: Bluetooth network
+23: IEEE 802.15.4 network
+24 - 40: Reserved for other types of local wireless network
+41: Ethernet
+42: DSL
+43: PLC
+44 - 50: reserved for other types of wireline networks.]]></Description>
+      </Item>
+      <Item ID="5">
+        <Name>Operator Name</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>String</Type>
+        <RangeEnumeration/>
+        <Units/>
+        <Description><![CDATA[Human-readable PLMN name of the registered operator. 3GPP TS 24.008: "The Network Name IE provides the PLMN name in either full or short form to be displayed to the user."]]></Description>
+      </Item>
+      <Item ID="6">
+        <Name>Roaming Status</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Boolean</Type>
+        <RangeEnumeration>0..1</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Indicates whether the UE is on home (0) or visited (1) PLMN. 3GPP TS 23.122: "The MS indicates whether it is registered on its home PLMN or on a visited PLMN."]]></Description>
+      </Item>
+      <Item ID="7">
+        <Name>Frequency Band</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration/>
+        <Units/>
+        <Description><![CDATA[Numeric identifier of the current operating band. 3GPP TS 36.101 Table 5.5-1: "The E-UTRA operating bands are designated by a Band Number (e.g., Band 1 = 2100 MHz)." For NR: 3GPP TS 38.101-1/-2.]]></Description>
+      </Item>
+
+      <!-- Radio Metrics -->
+      <Item ID="8">
+        <Name>RSRP</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Float</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units>dBm</Units>
+        <Description><![CDATA[Reference Signal Received Power. 3GPP TS 36.214/38.215: "RSRP is defined as the linear average over the power contributions of resource elements carrying reference signals."]]></Description>
+      </Item>
+      <Item ID="9">
+        <Name>RSRQ</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Float</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units>dB</Units>
+        <Description><![CDATA[Reference Signal Received Quality. 3GPP TS 36.214/38.215: "RSRQ = (N × RSRP) / RSSI, where N is number of RBs."]]></Description>
+      </Item>
+      <Item ID="10">
+        <Name>RSSI</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Float</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units>dBm</Units>
+        <Description><![CDATA[Received Signal Strength Indicator. 3GPP TS 36.214: "RSSI comprises the linear average of the total received wideband power observed at the antenna connector." GSM: TS 45.008; UMTS: TS 25.133.]]></Description>
+      </Item>
+      <Item ID="11">
+        <Name>SINR</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>Float</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Units>dB</Units>
+        <Description><![CDATA[Signal-to-Interference-and-Noise Ratio. 3GPP TS 36.214/38.215: "SINR represents the ratio of signal power to the sum of interference and noise power, expressed in dB."]]></Description>
+      </Item>
+
+      <!-- SIM / eSIM Information -->
+      <Item ID="12">
+        <Name>EID (eUICC)</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>String</Type>
+        <RangeEnumeration>32 hex digits</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[eUICC Identifier. GSMA SGP.22: "The eUICC Identifier (EID) is a 32-digit hexadecimal value that uniquely identifies an eUICC."]]></Description>
+      </Item>
+      <Item ID="13">
+        <Name>ICCID</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>String</Type>
+        <RangeEnumeration>19..20 digits</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[Integrated Circuit Card Identifier. ITU-T E.118: "The ICCID is a unique identifier of the SIM, consisting of up to 20 digits."]]></Description>
+      </Item>
+      <Item ID="14">
+        <Name>IMSI</Name>
+        <Operations>R</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Type>String</Type>
+        <RangeEnumeration>14..15 digits</RangeEnumeration>
+        <Units/>
+        <Description><![CDATA[International Mobile Subscriber Identity. ITU-T E.212/3GPP TS 23.003: "The IMSI is composed of the MCC, the MNC and the MSIN, and uniquely identifies a subscription in a PLMN." Length: 14-15 digits.]]></Description>
+      </Item>
+    </Resources>
+    <Description2></Description2>
+  </Object>
+</LWM2M>

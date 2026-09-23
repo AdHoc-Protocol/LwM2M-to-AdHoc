@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>PoE Management</Name>
+        <Description1><![CDATA[This LwM2M Object provides monitoring and control of Power over Ethernet (PoE) functionality on devices that support IEEE 802.3af/at/bt standards. It enables remote monitoring of PoE power input including voltage, current, and power consumption. For Powered Devices (PD), it provides visibility into the power being received. The object supports detection of PoE standard in use (af, at, bt), power class negotiation, and power cycling for recovery scenarios.]]></Description1>
+        <ObjectID>10522</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10522</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>PoE Supported</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Indicates whether the device hardware supports Power over Ethernet. True if PoE circuitry is present and functional, false if the device does not have PoE capability.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>PoE Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable PoE power input. When disabled, the device will not draw power from the PoE source even if available. Useful for power management or when using alternative power sources.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Input Voltage</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..57</RangeEnumeration>
+                <Units>V</Units>
+                <Description><![CDATA[Current PoE input voltage in volts. Typical values: 48V for 802.3af/at, 52-57V for 802.3bt. Returns 0 if PoE is not active or not connected.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Input Current</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units>A</Units>
+                <Description><![CDATA[Current being drawn from the PoE source in amperes. Maximum depends on PoE class: ~350mA for Class 1, ~600mA for Class 3, ~950mA for Class 4, up to 1900mA for 802.3bt Type 4.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Input Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..100</RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Current power consumption from PoE source in watts. Calculated as Input Voltage x Input Current. Maximum values: 15.4W (af), 30W (at), 60W (bt Type 3), 90W+ (bt Type 4).]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>PoE Standard</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Detected or configured PoE standard: "802.3af" (PoE, 15.4W), "802.3at" (PoE+, 30W), "802.3bt" (PoE++, 60-90W+), or "None" if PoE is not active.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>PoE Class</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..8</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Negotiated PoE power class (0-8). Class 0-3: 802.3af (0=default 15.4W, 1=4W, 2=7W, 3=15.4W). Class 4: 802.3at (30W). Class 5-8: 802.3bt (5=45W, 6=60W, 7=75W, 8=90W+).]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Maximum Power</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Maximum power available from the PSE (Power Sourcing Equipment) based on negotiated class and PSE capability. This is the upper limit the device can draw.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Power Allocated</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>W</Units>
+                <Description><![CDATA[Power allocated by the PSE for this device. May differ from Maximum Power based on PSE power budget management and LLDP-MED negotiation.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Temperature</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>-40..125</RangeEnumeration>
+                <Units>Cel</Units>
+                <Description><![CDATA[PoE controller or PD interface chip temperature in degrees Celsius. High temperatures may indicate overload or thermal issues. Operating range typically -40 to 85C.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable status string indicating PoE state: "Active" (powered via PoE), "Inactive" (PoE not in use), "Detecting" (PoE detection in progress), "Fault" (PoE error), "Disabled" (PoE disabled).]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Reset PoE</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to perform a PoE power cycle. Temporarily disables PoE input then re-enables it, forcing re-negotiation with the PSE. Useful for recovering from fault conditions.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

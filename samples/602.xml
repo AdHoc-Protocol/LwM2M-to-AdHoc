@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BSD-3 Clause License
+
+  Copyright 2025 Open Mobile Alliance.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  1. Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+  3. Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived
+  from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+  COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+
+  The above license is used as a license under copyright only.  Please
+  reference the OMA IPR Policy for patent licensing terms:
+  https://www.omaspecworks.org/about/intellectual-property-rights/
+
+-->
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+	<Object ObjectType="MODefinition">
+		<Name>Computational Performance</Name>
+		<Description1>The OMA Computational Performance object provides attributes to monitor the load on various aspects of the system.</Description1>
+		<ObjectID>602</ObjectID>
+		<ObjectURN>urn:oma:lwm2m:oma:602</ObjectURN>
+		<LWM2MVersion>1.0</LWM2MVersion>
+		<ObjectVersion>1.0</ObjectVersion>
+		<MultipleInstances>Multiple</MultipleInstances>
+		<Mandatory>Optional</Mandatory>
+		<Resources>
+			<Item ID="0">
+				<Name>Process ID</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Mandatory</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description><![CDATA[The ID of the process for which the measurements in this object instance were taken. 
+0: refers to the computational resources cumulated usage of ALL the Processes / Tasks running on the device
+1-100: Reserved
+100-99999999: Process ID (can be custom defined by the vendor or taken directly from the Process ID / Task ID on the OS)]]></Description>
+			</Item>
+			<Item ID="1">
+				<Name>Process Name</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>String</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description><![CDATA[String Identifying the name of the process for which the statics held in this object refer to. If present , when Resource "Process ID" is set to 0, this resource should read "ALL processes"]]></Description>
+			</Item>
+			<Item ID="2">
+				<Name>Measuring period</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description><![CDATA[Time interval, in seconds. during which counters were gathered and statics calculated (i.e 60s = 1 min, 300s = 5 min, 900s = 15 min rtc..)]]></Description>
+			</Item>
+			<Item ID="10">
+				<Name>CPU Usage</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The percentage of time in average that the CPU took processing the non-idle task(s) during the measuring period defined.
+This is a multi-instance resource, to be used if more than one CPU is present on the device and the vendor intends to provide visibility of its statistics. When multicore CPU architectures are used, Instance resource 0 when used, always refers to the average usage of all cores.]]></Description>
+			</Item>
+			<Item ID="11">
+				<Name>CPU Load</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The average of  CPU load over the measuring period defined. CPU load is defined as the number of processes using or waiting to use one core at a single point in time. 
+i,e. if the CPU load average is always below 0.8. This indicates that every process that needs to use the CPU can use it instantly without waiting. If the CPU load average is above 1, this indicates that there are processes that need to use the CPU but cannot at the moment due to the unavailability of the CPU.
+When multicore CPU architectures are used, Instance 0 when used, always refers to the average Load amongst all cores. 
+This is a multi-instance resource, to be used if more than one CPU is present on the device and the vendor intends to provide visibility of its statistics. When multicore CPU architectures are used, Instance resource 0 when used, always refers to the average usage of all cores.]]></Description>
+			</Item>
+			<Item ID="15">
+				<Name>Critical CPU usage Threshold</Name>
+				<Operations>RW</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The threshold for the percentage of CPU usage that once crossed, should be considered a critical event. If a device supports this threshold setting is is expected to also support the "High CPU Usage" resource, once the % threshold set in this resource is crossed "High CPU Usage"  resource should be set to 2.]]></Description>
+			</Item>
+			<Item ID="18">
+				<Name>High CPU Usage</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description><![CDATA[High CPU Usage  state
+0: Low to Normal Usage
+1: Intensive CPU usage
+2: CPU usage running at capacity]]></Description>
+			</Item>
+			<Item ID="20">
+				<Name>GPU Usage</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The percentage of time in average that the GPU took processing non-idle tasks during the measuring period defined.]]></Description>
+			</Item>
+			<Item ID="50">
+				<Name>Volatile Memory usage</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The percentage of available volatile memory consumed by the process(s) identified in resource 0.]]></Description>
+			</Item>
+			<Item ID="51">
+				<Name>Non-Volatile Memory usage</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Multiple</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The percentage of available non-volatile memory consumed by the process(s) identified in resource 0.]]></Description>
+			</Item>
+			<Item ID="55">
+				<Name>Critical Low Memory Threshold</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units>%</Units>
+				<Description><![CDATA[The threshold for the percentage of available volatile Memory usage that once crossed, should be considered a critical event. If a device supports this threshold setting is is expected to also support the "Low Memory" resource, once the % threshold set in this resource is crossed "Low memory" resource should be set to 2.]]></Description>
+			</Item>
+			<Item ID="58">
+				<Name>Low Memory</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description><![CDATA[High Memory Usage state:
+0: Low to Normal Usage
+1: Intensive Memory usage
+2: Memory usage running at capacity]]></Description>
+			</Item>
+			<Item ID="5518">
+				<Name>Timestamp</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Time</Type>
+				<RangeEnumeration></RangeEnumeration>
+				<Units></Units>
+				<Description>The timestamp of when the measurement was performed.</Description>
+			</Item>
+		</Resources>
+		<Description2/>
+	</Object>
+</LWM2M>
