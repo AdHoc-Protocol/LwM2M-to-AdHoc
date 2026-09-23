@@ -310,9 +310,40 @@ public class LwM2M2AdHoc {
 			return -1;
 		}
 
+		int physicsHints;
+
+		static final Pattern P_FLOOR = Pattern.compile("(?i)\\b(counters?|counts?|errors?|retries|retry|attempts?|" +
+				"failures?|reboots?|restarts?|sequence|total|cumulative)\\b");
+		static final Pattern P_CEILING = Pattern.compile("(?i)\\b(remaining|left|available|headroom)\\b");
+		static final Pattern P_CENTRED = Pattern.compile("(?i)\\b(rssi|rsrp|rsrq|snr|sinr|signal\\s*strength|" +
+				"delta|offset|deviation|drift|correction|bias|tilt|roll|pitch|yaw|latitude|longitude)\\b");
+
+		/**
+		 * Where a number's values actually sit is the one thing AdHoc can express and the object XML never states.
+		 * The registry does hint at it through resource NAMES and UNITS, but choosing a varint is a decision taken
+		 * after looking at real traffic, so the converter names the candidate in a comment on the field instead of
+		 * inventing an attribute — and never drops the question silently.
+		 *
+		 * @return the trailing comment, or "" when the registry gives no hint
+		 */
+		String physicsHint(Resource r) {
+			String n = r.name, u = r.units.trim();
+			String hint;
+			if (P_CENTRED.matcher(n).find() || u.equalsIgnoreCase("Cel") || u.equalsIgnoreCase("dBm") || u.equalsIgnoreCase("dB"))
+				hint = "centred, excursions both ways -> consider [X(amplitude)]";
+			else if (P_CEILING.matcher(n).find())
+				hint = "hugs its ceiling, rare excursions down -> consider [V(max)]";
+			else if (P_FLOOR.matcher(n).find())
+				hint = "floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000";
+			else return "";
+			physicsHints++;
+			return "  // physics: " + r.name.trim().toLowerCase() + (u.isEmpty() ? "" : ", " + u) + ", " + hint;
+		}
+
 		String field(Resource r, String name) {
 			List<String> attrs = new ArrayList<>();
 			String type;
+			String comment = "";
 			boolean nullable = !r.mandatory; // for value types; reference types are optional anyway
 			String range = r.range;
 			Matcher ir = INT_RANGE.matcher(range), by = BYTES.matcher(range);
@@ -333,8 +364,12 @@ public class LwM2M2AdHoc {
 						attrs.removeIf(a -> a.startsWith("Range("));
 						break;
 					}
-					if (lim == null) type = r.type.equals("Integer") ? "long" : "ulong";
-					else {
+					if (lim == null) {
+						// No hard range: the value is unbounded, so its physics is the only thing that could
+						// shrink it. The registry does not state that, but the name and units often hint at it.
+						type = r.type.equals("Integer") ? "long" : "ulong";
+						comment = physicsHint(r);
+					} else {
 						long min = lim[0], max = lim[1];
 						if (r.type.equals("Unsigned Integer") && min < 0) min = 0;
 						type = intType(min, max);
@@ -399,7 +434,7 @@ public class LwM2M2AdHoc {
 
 			String meta = resourceAttributes(r);
 			String all = meta.isEmpty() && attrs.isEmpty() ? "" : "[" + String.join(", ", attrs) + (attrs.isEmpty() ? "" : ", ") + meta.substring(1, meta.length() - 2) + "] ";
-			return all + type + " " + name + ";";
+			return all + type + " " + name + ";" + comment;
 		}
 
 		boolean usesBlob;

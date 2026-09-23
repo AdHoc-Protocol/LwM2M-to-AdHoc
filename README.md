@@ -69,6 +69,63 @@ namespace org.lwm2m {
 }
 ```
 
+## Before and after
+
+Object 3416 *Outdoor lamp controller*, 765 lines of XML with 66 resources — [source](samples/3416.xml) →
+[result](AdHoc/LwM2M.cs) (one descriptor for all 392 objects of the registry, so the pack below is one of 392 in
+that file).
+
+```xml
+			<Item ID="3">
+				<Name>Dimming level</Name>
+				<Operations>R</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Mandatory</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration>0..100</RangeEnumeration>
+				<Units>/100</Units>
+				<Description><![CDATA[Dimming level (0 for OFF and 100% for ON) measured on the outdoor lamp controller.]]></Description>
+			</Item>
+			<Item ID="4">
+				<Name>Default dimming level</Name>
+				<Operations>RW</Operations>
+				<MultipleInstances>Single</MultipleInstances>
+				<Mandatory>Optional</Mandatory>
+				<Type>Integer</Type>
+				<RangeEnumeration>0..100</RangeEnumeration>
+				<Units>/100</Units>
+				<Description><![CDATA[The default dimming level that the outdoor lamp controller applies when no schedule nor manual override command is active]]></Description>
+			</Item>
+			<!-- … 64 more resources … -->
+```
+
+```csharp
+        class Outdoor_lamp_controller {
+            public const ushort lwm2m_object_id          = 3416;
+            public const string lwm2m_urn                = "urn:oma:lwm2m:ext:3416:3.0";
+            public const string lwm2m_version            = "1.0";
+            public const string lwm2m_object_version     = "3.0";
+            public const bool   lwm2m_multiple_instances = true;
+            public const bool   lwm2m_mandatory          = false;
+
+            /**
+            Dimming level (0 for OFF and 100% for ON) measured on the outdoor lamp controller.
+            */
+            [MinMax(0, 100), ResourceId(3), Operations("R"), Units("/100"), Mandatory] byte Dimming_level;
+
+            /**
+            The default dimming level that the outdoor lamp controller applies when no schedule nor manual override
+            command is active
+            */
+            [MinMax(0, 100), ResourceId(4), Operations("RW"), Units("/100")] byte? Default_dimming_level;
+            // … 64 more resources …
+        }
+```
+
+`0..100` became `[MinMax(0, 100)]`, so each level is four bits on the wire instead of four bytes; `Mandatory`
+decided `byte` against `byte?`; the resource id, operations and unit rode along as metadata; and the description
+became the doc comment that `KeepDoc` / `SkipDoc` filters can select on.
+
 ## Mapping
 
 | LwM2M XML | AdHoc | Notes |
@@ -118,7 +175,8 @@ java -Dfile.encoding=UTF-8 -cp out org.unirail.LwM2M2AdHoc <object.xml | folder>
 | `AdHoc/LwM2M_Temperature.cs` | object 3303 | **OK** |
 
 AdHoc vocabulary used: 428 `[MinMax]` fields from integer ranges, 140 `Duration`-alias fields for elapsed times,
-237 `DateTime` fields, one `_DefaultMaxLengthOf` per file. No `id = '` appears in either file — every pack id is
+237 `DateTime` fields, 149 `// physics:` varint candidates marked on unbounded integers, one `_DefaultMaxLengthOf`
+per file. No `id = '` appears in either file — every pack id is
 AdHocAgent's to assign. The branch dump (`AdHoc/LwM2M.branches.txt`) shows the `Objects` state carrying all 392
 object packs on both sides and the `Execute` state carrying all 395 command packs Server → Client; `ObjectLink`,
 `Blob` and the `Duration` aliases stay non-transmittable.
@@ -132,9 +190,17 @@ object packs on both sides and the `Execute` state carrying all 395 command pack
 - Executable resources become command packs with a free-text `execute_arguments` field; the argument syntax is not
   modelled beyond that.
 - `Time` resources use `DateTime` (millisecond timestamp) while LwM2M transmits seconds.
-- **No varint attributes (`[A]` / `[V]` / `[X]`) are emitted anywhere.** They must state where a number's values
-  actually sit, and LwM2M says nothing about the distribution of a resource — only its range, which `[MinMax]`
-  already expresses. Guessing would make the wire larger. Add them by hand where you know the traffic.
+- **No varint attributes (`[A]` / `[V]` / `[X]`) are emitted, but the candidates are marked.** How LwM2M encodes a
+  value decides nothing here — AdHoc lays out its own frame. What `[A]`/`[V]`/`[X]` need is knowledge of where
+  inside its range a resource's values actually sit, and the object XML states ranges but never that. The
+  arithmetic is worth stating once: a varint wins while the typical distance from the base stays under about two
+  million, and always loses past 268 435 455, so a monotonic byte counter or an epoch second is a varint *loss*.
+  Where a resource's name or units do hint at the physics, the converter writes the candidate as a comment on the
+  field — 149 of them — and leaves the decision to whoever knows the traffic:
+  `*Counter`, `*Count`, `Errors`, `Retries`, `Attempts`, `Reboots`, `Total` → floored at zero, unbounded → `[A]`;
+  `Remaining*`, `*Left`, `Available`, `Headroom` → hugs its ceiling → `[V]`;
+  `RSSI`, `SNR`, `Signal Strength`, a delta/offset/deviation, or units `Cel` / `dB` / `dBm` → centred → `[X]`.
+  Resources with a hard range keep `[MinMax]` and need no varint; epoch `Time` is already a `DateTime`.
 - The `Duration` aliases are inferred from resource names and units, so the mapping is a good default rather than a
   certainty: check resources whose name merely contains `Period` or `Interval`, and any duration you want at a
   coarser precision than one step of its unit.

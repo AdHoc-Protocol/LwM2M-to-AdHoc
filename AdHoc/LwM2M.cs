@@ -1183,14 +1183,14 @@ namespace org.lwm2m {
             /**
             The number of successive communication attempts before which a communication sequence is considered as failed.
             */
-            [ResourceId(17), Operations("RW")] ulong? Communication_Retry_Count;
+            [ResourceId(17), Operations("RW")] ulong? Communication_Retry_Count;  // physics: communication retry count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The delay, in seconds, between successive communication attempts in a communication sequence. This value is
             multiplied by two to the power of the communication retry attempt minus one (2**(retry attempt-1)) to create
             an exponential back-off.
             */
-            [ResourceId(18), Operations("RW"), Units("s")] ulong? Communication_Retry_Timer;
+            [ResourceId(18), Operations("RW"), Units("s")] ulong? Communication_Retry_Timer;  // physics: communication retry timer, s, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The delay, in seconds, between successive communication sequences. A communication sequence is defined as the
@@ -1203,7 +1203,7 @@ namespace org.lwm2m {
             /**
             The number of successive communication sequences before which a registration attempt is considered as failed.
             */
-            [ResourceId(20), Operations("RW")] ulong? Communication_Sequence_Retry_Count;
+            [ResourceId(20), Operations("RW")] ulong? Communication_Sequence_Retry_Count;  // physics: communication sequence retry count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Using the Trigger Resource a LwM2M Client can indicate whether it is reachable over SMS (value set to 'true')
@@ -1489,7 +1489,7 @@ namespace org.lwm2m {
             Total amount of storage space which can store data and software in the LwM2M Device (expressed in kilobytes). 
             Note: 1 kilobyte corresponds to 1000 bytes.
             */
-            [ResourceId(21), Operations("R")] long? Memory_Total;
+            [ResourceId(21), Operations("R")] long? Memory_Total;  // physics: memory total, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Reference to external "Device" object instance containing information. For example, such an external device
@@ -1600,7 +1600,7 @@ namespace org.lwm2m {
             standards, (e.g. for LTE Cellular Network
             refer to 3GPP TS 36.133 specification).
             */
-            [ResourceId(2), Operations("R"), Units("dBm"), Mandatory] long Radio_Signal_Strength;
+            [ResourceId(2), Operations("R"), Units("dBm"), Mandatory] long Radio_Signal_Strength;  // physics: radio signal strength, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             This contains received link quality  e.g. LQI for IEEE 802.15.4 (range 0...255), RxQual Downlink for GSM
@@ -1658,7 +1658,7 @@ namespace org.lwm2m {
             SINR: Signal to Interference plus Noise Ratio SINR is the ratio of the strength of the received signal to the
             strength of the received interference signal (noise and interference).
             */
-            [ResourceId(11), Operations("R"), Units("dB")] long? SignalSNR;
+            [ResourceId(11), Operations("R"), Units("dB")] long? SignalSNR;  // physics: signalsnr, dB, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Location Area Code in case Network Bearer Resource is a Cellular Network. As specified in TS [3GPP 23.003] and
@@ -1938,12 +1938,12 @@ namespace org.lwm2m {
             /**
             Indicate the total number of SMS successfully transmitted during the collection period.
             */
-            [ResourceId(0), Operations("R")] long? SMS_Tx_Counter;
+            [ResourceId(0), Operations("R")] long? SMS_Tx_Counter;  // physics: sms tx counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Indicate the total number of SMS successfully received during the collection period.
             */
-            [ResourceId(1), Operations("R")] long? SMS_Rx_Counter;
+            [ResourceId(1), Operations("R")] long? SMS_Rx_Counter;  // physics: sms rx counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Indicate the total amount of data (IP / non-IP) transmitted during the collection period expressed in
@@ -2897,32 +2897,32 @@ namespace org.lwm2m {
             /**
             Total number of bytes sent via this interface
             */
-            [ResourceId(33), Operations("R")] long? Total_Bytes_Sent;
+            [ResourceId(33), Operations("R")] long? Total_Bytes_Sent;  // physics: total bytes sent, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of bytes received via this interface
             */
-            [ResourceId(34), Operations("R")] long? Total_Bytes_Received;
+            [ResourceId(34), Operations("R")] long? Total_Bytes_Received;  // physics: total bytes received, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total packets sent via this interface
             */
-            [ResourceId(35), Operations("R")] long? Total_Packets_Sent;
+            [ResourceId(35), Operations("R")] long? Total_Packets_Sent;  // physics: total packets sent, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total packets received via this interface
             */
-            [ResourceId(36), Operations("R")] long? Total_Packets_Received;
+            [ResourceId(36), Operations("R")] long? Total_Packets_Received;  // physics: total packets received, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets which could not be transmitted because of errors.
             */
-            [ResourceId(37), Operations("R")] long? Transmit_Errors;
+            [ResourceId(37), Operations("R")] long? Transmit_Errors;  // physics: transmit errors, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets received with errors which prevented those packets from being delivered.
             */
-            [ResourceId(38), Operations("R")] long? Receive_Errors;
+            [ResourceId(38), Operations("R")] long? Receive_Errors;  // physics: receive errors, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Count of Unicast Packets Sent
@@ -3044,7 +3044,7 @@ namespace org.lwm2m {
             /**
             Provides guide to the application when performing manual network selection.
             */
-            [ResourceId(4), Operations("RW")] long? Acceptable_RSSI_1xEV_DO;
+            [ResourceId(4), Operations("RW")] long? Acceptable_RSSI_1xEV_DO;  // physics: acceptable rssi (1xev-do), centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Comma separated list of allowed Global Cell Identities.
@@ -3770,7 +3770,7 @@ namespace org.lwm2m {
             Indicates the Operating NR Bands supported by UE in NSA mode. Value represents the integer value of band
             mentioned in 3GPP  Spec 38.104 (Table: Table 5.2-1 and Table 5.2-2)
             */
-            [ResourceId(1), Operations("R")] long[,,] NR_Band_Support_available;
+            [ResourceId(1), Operations("R")] long[,,] NR_Band_Support_available;  // physics: nr band support available, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             Indicates the Operating NR Bands on which UE is attached. Value represents the integer value of band mentioned
@@ -3846,7 +3846,7 @@ namespace org.lwm2m {
             The Aggregate Maximum Bitrate which is applicable to a given APN over which LwM2M session is established for
             5G SA (FDD/TDD) Cellular Network.
             */
-            [ResourceId(12), Operations("R"), Units("dB")] long? APN_AMBR;
+            [ResourceId(12), Operations("R"), Units("dB")] long? APN_AMBR;  // physics: apn-ambr, dB, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Indicates the QoS at NAS layer  for 5G SA (FDD/TDD) Cellular Network.
@@ -4518,7 +4518,7 @@ namespace org.lwm2m {
             /**
             Total amount of storage space which can store data and software in the LwM2M Device
             */
-            [ResourceId(10), Operations("R"), Units("KiB")] long? Total_Memory_on_SIM;
+            [ResourceId(10), Operations("R"), Units("KiB")] long? Total_Memory_on_SIM;  // physics: total memory on sim, KiB, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             This resource provides the unique identification number for each installed profile of the current SIM in case
@@ -4757,7 +4757,7 @@ namespace org.lwm2m {
             /**
             Total amount of storage space which can store data and software in the LwM2M Device.
             */
-            [ResourceId(13), Operations("R"), Units("KiB")] long? Total_Memory_on_SIM;
+            [ResourceId(13), Operations("R"), Units("KiB")] long? Total_Memory_on_SIM;  // physics: total memory on sim, KiB, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             This Elementary File (EF) provides a unique identification number for the UICC/Smart Cards. Please refer ETSI
@@ -5831,7 +5831,7 @@ namespace org.lwm2m {
             /**
             Total number of detection events
             */
-            [ResourceId(1), Operations("R")] long? Detection_Counter;
+            [ResourceId(1), Operations("R")] long? Detection_Counter;  // physics: detection counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Sensitivity for approach detection
@@ -5866,7 +5866,7 @@ namespace org.lwm2m {
             /**
             Number of detections within the last hour
             */
-            [ResourceId(10), Operations("R")] long? Hourly_Detection_Counter;
+            [ResourceId(10), Operations("R")] long? Hourly_Detection_Counter;  // physics: hourly detection counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Indicates a radar sensor communication failure
@@ -5876,12 +5876,12 @@ namespace org.lwm2m {
             /**
             Total number of approach detection events
             */
-            [ResourceId(12), Operations("R")] long? Approach_Detection_Counter;
+            [ResourceId(12), Operations("R")] long? Approach_Detection_Counter;  // physics: approach detection counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of leave detection events
             */
-            [ResourceId(13), Operations("R")] long? Leave_Detection_Counter;
+            [ResourceId(13), Operations("R")] long? Leave_Detection_Counter;  // physics: leave detection counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The timestamp of when the measurement was performed.
@@ -6327,7 +6327,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The polarity of the digital input as a Boolean (False = Normal, True = Reversed).
@@ -6737,7 +6737,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The type of the sensor (for instance PIR type).
@@ -9643,7 +9643,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The total time in seconds that the timer input is true. Writing a 0 resets the time.
@@ -9658,7 +9658,7 @@ namespace org.lwm2m {
             /**
             Counts the number of times the timer output transitions from 0 to 1.
             */
-            [ResourceId(5534), Operations("RW")] long? Counter;
+            [ResourceId(5534), Operations("RW")] long? Counter;  // physics: counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Type of timer pattern used by the timer. 1: One-shot, 2: On-Time or Interval, 3: Time delay on pick-up, 4:
@@ -9770,7 +9770,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The time in seconds that the device has been on. Writing a value of 0 resets the counter.
@@ -9858,12 +9858,12 @@ namespace org.lwm2m {
             /**
             Counts the number of times the increase control has been operated. Writing a 0 resets the counter.
             */
-            [ResourceId(5541), Operations("RW")] long? Up_Counter;
+            [ResourceId(5541), Operations("RW")] long? Up_Counter;  // physics: up counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Counts the times the decrease control has been operated. Writing a 0 resets the counter.
             */
-            [ResourceId(5542), Operations("RW")] long? Down_Counter;
+            [ResourceId(5542), Operations("RW")] long? Down_Counter;  // physics: down counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The application type of the sensor or actuator as a string depending on the use case.
@@ -9892,7 +9892,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The measured value along the X axis.
@@ -10029,7 +10029,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The application type of the sensor or actuator as a string depending on the use case.
@@ -10156,7 +10156,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The application type of the sensor or actuator as a string depending on the use case.
@@ -10892,12 +10892,12 @@ namespace org.lwm2m {
             /**
             RSRP Value in dBm (-180..-30)
             */
-            [ResourceId(6035), Operations("R"), Mandatory] long rsrp;
+            [ResourceId(6035), Operations("R"), Mandatory] long rsrp;  // physics: rsrp, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             RSRQ Value in dB (-30..10)
             */
-            [ResourceId(6036), Operations("R"), Mandatory] long rsrq;
+            [ResourceId(6036), Operations("R"), Mandatory] long rsrq;  // physics: rsrq, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             EARFCN - frequency
@@ -10935,12 +10935,12 @@ namespace org.lwm2m {
             /**
             RSRP Value in dBm (-180..-30)
             */
-            [ResourceId(6035), Operations("R"), Mandatory] long rsrp;
+            [ResourceId(6035), Operations("R"), Mandatory] long rsrp;  // physics: rsrp, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             RSRQ Value in dB (-30..10)
             */
-            [ResourceId(6036), Operations("R"), Mandatory] long rsrq;
+            [ResourceId(6036), Operations("R"), Mandatory] long rsrq;  // physics: rsrq, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             EARFCN - frequency
@@ -11001,7 +11001,7 @@ namespace org.lwm2m {
             /**
             headroom value in dB (-23..40)
             */
-            [ResourceId(2), Operations("R"), Mandatory] long headroom_value;
+            [ResourceId(2), Operations("R"), Mandatory] long headroom_value;  // physics: headroom-value, hugs its ceiling, rare excursions down -> consider [V(max)]
         }
 
         // ═════════════════════════ 3374.xml: radioLinkMonitoring (urn:oma:lwm2m:ext:3374) ═════════════════════════
@@ -11669,7 +11669,7 @@ namespace org.lwm2m {
             /**
             The total energy usage of the device (accumulated value)
             */
-            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;
+            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;  // physics: total energy usage, Ws, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The actual power usage of the device. Scaling is 0.1W / unit
@@ -12690,7 +12690,7 @@ namespace org.lwm2m {
             /**
             The total energy usage of the device (accumulated value)
             */
-            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;
+            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;  // physics: total energy usage, Ws, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The actual power usage of the device. Scaling is 0.1W per unit
@@ -12851,7 +12851,7 @@ namespace org.lwm2m {
             /**
             The total energy usage of the device (accumulated value)
             */
-            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;
+            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;  // physics: total energy usage, Ws, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The actual power usage of the device. Scaling is 0.1W per unit
@@ -13073,7 +13073,7 @@ namespace org.lwm2m {
             /**
             The total energy usage of the device (accumulated value)
             */
-            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;
+            [Range("0..18446744073709551615"), ResourceId(910), Operations("R"), Units("Ws"), Mandatory] ulong Total_Energy_Usage;  // physics: total energy usage, Ws, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The actual power usage of the device. Scaling is 0.1W per unit
@@ -13715,7 +13715,7 @@ namespace org.lwm2m {
             /**
             Number of supply losses since last reset.
             */
-            [ResourceId(10), Operations("R")] long? Supply_loss_counter;
+            [ResourceId(10), Operations("R")] long? Supply_loss_counter;  // physics: supply loss counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Reason identified by the device why the device has lost mains supply (e.g. lightning if the device measured a
@@ -14044,7 +14044,7 @@ namespace org.lwm2m {
             Cumulated volume of data sent and received by/from the device since beginning of the day. This information
             could be used for data invoicing.
             */
-            [ResourceId(5), Operations("R"), Units("B")] long? Cumulated_daily_data_volume_total;
+            [ResourceId(5), Operations("R"), Units("B")] long? Cumulated_daily_data_volume_total;  // physics: cumulated daily data volume total, B, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Set to True if the device detects a difference in a received payload and the hash.
@@ -14201,7 +14201,7 @@ namespace org.lwm2m {
             3: Thermal Derating
             4: Thermal Shutdown
             */
-            [ResourceId(6), Operations("R")] long? Lamp_failure_reason;
+            [ResourceId(6), Operations("R")] long? Lamp_failure_reason;  // physics: lamp failure reason, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Set to True in case the control gear has a failure.
@@ -14221,7 +14221,7 @@ namespace org.lwm2m {
             4: External Supply Overvoltage
             5: Output Power Limitation
             */
-            [ResourceId(8), Operations("R")] long? Control_gear_failure_reason;
+            [ResourceId(8), Operations("R")] long? Control_gear_failure_reason;  // physics: control gear failure reason, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Set to True if the outdoor lamp controller detects that its relay is not operating as it is expected to.
@@ -14257,12 +14257,12 @@ namespace org.lwm2m {
             /**
             Number of times the lamp was switched from ON to OFF since the last lamp switch counter reset.
             */
-            [ResourceId(18), Operations("R")] long? Lamp_switch_counter;
+            [ResourceId(18), Operations("R")] long? Lamp_switch_counter;  // physics: lamp switch counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of times the control gear was switched from OFF to ON.
             */
-            [ResourceId(20), Operations("R")] long? Control_gear_start_counter;
+            [ResourceId(20), Operations("R")] long? Control_gear_start_counter;  // physics: control gear start counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Temperature measured by the control gear and transmitted to the device through DALI, Zhaga D4i or equivalent.
@@ -14278,7 +14278,7 @@ namespace org.lwm2m {
             Number of time the control gear has derated the light source due to a high temperature, since last counter
             reset.
             */
-            [ResourceId(23), Operations("R")] long? Control_gear_thermal_derating_counter;
+            [ResourceId(23), Operations("R")] long? Control_gear_thermal_derating_counter;  // physics: control gear thermal derating counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Set to True if the control gear has shut the light source down due to high temperature.
@@ -14288,7 +14288,7 @@ namespace org.lwm2m {
             /**
             Number of times the control gear has shutdown the light source since last counter reset.
             */
-            [ResourceId(26), Operations("R")] long? Control_gear_thermal_shutdown_counter;
+            [ResourceId(26), Operations("R")] long? Control_gear_thermal_shutdown_counter;  // physics: control gear thermal shutdown counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Address or reference of the output port (e.g. DALI port address or 1-10 volt output) in case of multiple
@@ -15477,12 +15477,12 @@ namespace org.lwm2m {
             /**
             Number of power failures in any phase
             */
-            [ResourceId(29), Operations("R")] long? Number_of_power_failures_in_any_phase;
+            [ResourceId(29), Operations("R")] long? Number_of_power_failures_in_any_phase;  // physics: number of power failures in any phase, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of long power failures in any phase.
             */
-            [ResourceId(30), Operations("R")] long? Number_of_long_power_failures_in_any_phase;
+            [ResourceId(30), Operations("R")] long? Number_of_long_power_failures_in_any_phase;  // physics: number of long power failures in any phase, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Time threshold for long power failure.
@@ -17200,7 +17200,7 @@ namespace org.lwm2m {
             /**
             Total amount of filling operations performed.
             */
-            [ResourceId(19), Operations("R")] long? Filling_operations_counter;
+            [ResourceId(19), Operations("R")] long? Filling_operations_counter;  // physics: filling operations counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Set to true if the cover of the container is open and the filling level cannot be estimated. This is valid if
@@ -17833,7 +17833,7 @@ namespace org.lwm2m {
             /**
             Number of Alarm A events since reset.
             */
-            [ResourceId(8), Operations("R")] long? Alarm_A_Counter;
+            [ResourceId(8), Operations("R")] long? Alarm_A_Counter;  // physics: alarm a counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             If the water Level exceeds this value, the alarm B is set to True. This alarm has lowest severity. A value of
@@ -17849,7 +17849,7 @@ namespace org.lwm2m {
             /**
             Number of Alarm B events since reset.
             */
-            [ResourceId(11), Operations("R")] long? Alarm_B_Counter;
+            [ResourceId(11), Operations("R")] long? Alarm_B_Counter;  // physics: alarm b counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             If the water Level exceeds this value, the alarm C is set to True. This alarm has lowest severity. A value of
@@ -17865,7 +17865,7 @@ namespace org.lwm2m {
             /**
             Number of Alarm C events since reset.
             */
-            [ResourceId(14), Operations("R")] long? Alarm_C_Counter;
+            [ResourceId(14), Operations("R")] long? Alarm_C_Counter;  // physics: alarm c counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             If the water Level exceeds this value, the alarm D is set to True. This alarm has lowest severity. A value of
@@ -17881,7 +17881,7 @@ namespace org.lwm2m {
             /**
             Number of Alarm D events since reset.
             */
-            [ResourceId(17), Operations("R")] long? Alarm_D_Counter;
+            [ResourceId(17), Operations("R")] long? Alarm_D_Counter;  // physics: alarm d counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The timestamp of when the measurement was performed.
@@ -18055,7 +18055,7 @@ namespace org.lwm2m {
             /**
             Cumulative counter reporting on total observed errors.
             */
-            [ResourceId(6), Operations("R")] long? Error_Counter;
+            [ResourceId(6), Operations("R")] long? Error_Counter;  // physics: error counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Transmit power used by the IoT device on the LPWAN network.
@@ -18248,17 +18248,17 @@ namespace org.lwm2m {
             /**
             IEEE 802.15.4 macTxSuccessCount, Packets transmitted and acked with no retries.
             */
-            [ResourceId(1), Operations("R")] long? Tx_Packets_Total;
+            [ResourceId(1), Operations("R")] long? Tx_Packets_Total;  // physics: tx packets total, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             IEEE 802.15.4 macRetryCount, successful transmission after one retry.
             */
-            [ResourceId(2), Operations("R")] long? Tx_Success_on_single_Retry;
+            [ResourceId(2), Operations("R")] long? Tx_Success_on_single_Retry;  // physics: tx success on single retry, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             IEEE 802.15.4 macMultipleRetryCount, TX acked after more than one retry.
             */
-            [ResourceId(3), Operations("R")] long? Tx_Success_on_Multi_Retry;
+            [ResourceId(3), Operations("R")] long? Tx_Success_on_Multi_Retry;  // physics: tx success on multi retry, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets that failed transmission.
@@ -18268,17 +18268,17 @@ namespace org.lwm2m {
             /**
             Total number of packets that failed to transmit due to busy channel.
             */
-            [ResourceId(5), Operations("R")] long? TX_CCA_failures;
+            [ResourceId(5), Operations("R")] long? TX_CCA_failures;  // physics: tx cca failures, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets that failed to transmit due to lack of acknowledgement.
             */
-            [ResourceId(6), Operations("R")] long? Tx_ACK_failure;
+            [ResourceId(6), Operations("R")] long? Tx_ACK_failure;  // physics: tx ack failure, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets received.
             */
-            [ResourceId(7), Operations("R")] long? Rx_Packets_Total;
+            [ResourceId(7), Operations("R")] long? Rx_Packets_Total;  // physics: rx packets total, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets discarded.
@@ -18582,7 +18582,7 @@ namespace org.lwm2m {
             /**
             Number of WBGT Alarm events since reset.
             */
-            [ResourceId(5), Operations("R")] long? WBGT_Alarm_Counter;
+            [ResourceId(5), Operations("R")] long? WBGT_Alarm_Counter;  // physics: wbgt alarm counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Last or Current Measured Value from the Sensor.
@@ -19170,7 +19170,7 @@ namespace org.lwm2m {
             Bit 7: Out of runtime memory
             Bit 8..31: reserved for future use
             */
-            [ResourceId(11), Operations("R"), Mandatory] long Error_Conditions;
+            [ResourceId(11), Operations("R"), Mandatory] long Error_Conditions;  // physics: error conditions, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Bitmap
@@ -19283,19 +19283,19 @@ namespace org.lwm2m {
             Bit 2: Invalid program function
             Bit 3..31: reserved for future use
             */
-            [ResourceId(2), Operations("R"), Mandatory] long Error_Conditions;
+            [ResourceId(2), Operations("R"), Mandatory] long Error_Conditions;  // physics: error conditions, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Cumulative counter for the number of times the current control program has been evaluated
             */
-            [ResourceId(4), Operations("R")] long? Evaluation_Counter;
+            [ResourceId(4), Operations("R")] long? Evaluation_Counter;  // physics: evaluation counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Cumulative counter for the number of times the current control program has ben executed after evaluation,
             triggering the corresponding action and output. With 'Execution counter' less than or equal to 'Evaluation
             counter'
             */
-            [ResourceId(5), Operations("R")] long? Execution_Counter;
+            [ResourceId(5), Operations("R")] long? Execution_Counter;  // physics: execution counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Timestamp for the latest execution of the current CP
@@ -19851,12 +19851,12 @@ namespace org.lwm2m {
             /**
             Total physical RAM in bytes.
             */
-            [ResourceId(4), Operations("R"), Units("B")] ulong? RAM_Total;
+            [ResourceId(4), Operations("R"), Units("B")] ulong? RAM_Total;  // physics: ram total, B, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total Available RAM (free + reclaimable) in bytes that can be used without swapping.
             */
-            [ResourceId(5), Operations("R"), Units("B")] ulong? RAM_Available;
+            [ResourceId(5), Operations("R"), Units("B")] ulong? RAM_Available;  // physics: ram available, B, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             Number of runnable tasks, useful to detect CPU contention and scheduler saturation.
@@ -19922,7 +19922,7 @@ namespace org.lwm2m {
             Number of bytes transmitted and received so far during the collection period for the app referenced in
             resource 4050.
             */
-            [ResourceId(4), Operations("R"), Mandatory] ulong Total_Bytes;
+            [ResourceId(4), Operations("R"), Mandatory] ulong Total_Bytes;  // physics: total bytes, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of packets transmitted so far during the collection period for the app referenced in resource 4050.
@@ -20440,7 +20440,7 @@ namespace org.lwm2m {
             /**
             Remaining charging time
             */
-            [ResourceId(12), Operations("R"), Units("min"), Mandatory] long Vehicle_Charge_Remaining_Time;
+            [ResourceId(12), Operations("R"), Units("min"), Mandatory] long Vehicle_Charge_Remaining_Time;  // physics: vehicle charge remaining time, min, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             Voltage of the battery pack
@@ -20455,7 +20455,7 @@ namespace org.lwm2m {
             /**
             Remaining capacity of the battery pack
             */
-            [ResourceId(15), Operations("R"), Units("Ah"), Mandatory] long Battery_Pack_Remaining_Capacity;
+            [ResourceId(15), Operations("R"), Units("Ah"), Mandatory] long Battery_Pack_Remaining_Capacity;  // physics: battery pack remaining capacity, Ah, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             SOC(state of charge) of the battery pack
@@ -20480,12 +20480,12 @@ namespace org.lwm2m {
             /**
             Minimum temperature of the battery module
             */
-            [ResourceId(20), Operations("R"), Units("Cel"), Mandatory] long Battery_Module_MinTemp;
+            [ResourceId(20), Operations("R"), Units("Cel"), Mandatory] long Battery_Module_MinTemp;  // physics: battery module mintemp, Cel, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Maximum temperature of the battery module
             */
-            [ResourceId(21), Operations("R"), Units("Cel"), Mandatory] long Battery_Module_MaxTemp;
+            [ResourceId(21), Operations("R"), Units("Cel"), Mandatory] long Battery_Module_MaxTemp;  // physics: battery module maxtemp, Cel, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Whether the battery is connected or not. 0: unconnected 1: connected
@@ -20500,7 +20500,7 @@ namespace org.lwm2m {
             /**
             Temperature of MCU(motor control unit)
             */
-            [ResourceId(25), Operations("R"), Units("Cel"), Mandatory] long MCU_Temperature;
+            [ResourceId(25), Operations("R"), Units("Cel"), Mandatory] long MCU_Temperature;  // physics: mcu temperature, Cel, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Rotational speed of the motor
@@ -20510,7 +20510,7 @@ namespace org.lwm2m {
             /**
             Temperature of the motor
             */
-            [ResourceId(27), Operations("R"), Units("Cel"), Mandatory] long Motor_Temperature;
+            [ResourceId(27), Operations("R"), Units("Cel"), Mandatory] long Motor_Temperature;  // physics: motor temperature, Cel, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Whether the motor is OT or not. 0: normal 1: OT warning
@@ -21185,12 +21185,12 @@ namespace org.lwm2m {
             /**
             This field specifies the reference signal received power (RSRP) measurement.
             */
-            [ResourceId(3), Operations("R"), Mandatory] long rsrp_Result;
+            [ResourceId(3), Operations("R"), Mandatory] long rsrp_Result;  // physics: rsrp-result, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             This field specifies the reference signal received quality (RSRQ) measurement.
             */
-            [ResourceId(4), Operations("R")] long? rsrq_Result;
+            [ResourceId(4), Operations("R")] long? rsrq_Result;  // physics: rsrq-result, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             This field specifies the UE Rx-Tx time difference measurement.
@@ -21233,7 +21233,7 @@ namespace org.lwm2m {
             /**
             Error code reported by the meter
             */
-            [ResourceId(11), Operations("R")] long[,,] Error_code;
+            [ResourceId(11), Operations("R")] long[,,] Error_code;  // physics: error code, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The current active power.
@@ -21590,7 +21590,7 @@ namespace org.lwm2m {
             defaults to 0 and no retries are attempted. This retry behaviour is at an application level and should be set
             with consideration of standard CoAP retry behaviour.
             */
-            [ResourceId(4), Operations("RW")] long? Number_of_Retries;
+            [ResourceId(4), Operations("RW")] long? Number_of_Retries;  // physics: number of retries, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The Retry Period resource is a readable and writable resource representing the number of seconds between each
@@ -21646,7 +21646,7 @@ namespace org.lwm2m {
             Top Frequency Count is a readable and writeable resource used represent the number of samples to provide if
             the Detection Mode is set to Mode 2 (Top Frequency Values). If not provided, this value should default to 3
             */
-            [ResourceId(3), Operations("RW")] long? Top_Frequency_Count;
+            [ResourceId(3), Operations("RW")] long? Top_Frequency_Count;  // physics: top frequency count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Frequency Thresholds is a multiple value readable and writeable resource used to represent upper bound
@@ -22915,7 +22915,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23073,7 +23073,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23230,7 +23230,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23389,7 +23389,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23547,7 +23547,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23705,7 +23705,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -23863,7 +23863,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24021,7 +24021,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24181,7 +24181,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24338,7 +24338,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24495,7 +24495,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24652,7 +24652,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24809,7 +24809,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -24967,7 +24967,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -25024,7 +25024,7 @@ namespace org.lwm2m {
             /**
             The cumulative value of active state detected.
             */
-            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;
+            [ResourceId(5501), Operations("R")] long? Digital_Input_Counter;  // physics: digital input counter, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The application type of the sensor or actuator as a string depending on the use case.
@@ -25958,7 +25958,7 @@ namespace org.lwm2m {
             context on a particular APN. This resource should be defaulted to 2 retries. Should a device integrator wish
             to manipulate this the integrator should be able to do so.
             */
-            [ResourceId(4), Operations("RW"), Mandatory] long APN_Retries;
+            [ResourceId(4), Operations("RW"), Mandatory] long APN_Retries;  // physics: apn retries, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The APN retry period multi instance resource is the time in seconds between attempting a context activation on
@@ -25982,7 +25982,7 @@ namespace org.lwm2m {
             sample rate. Once the 10 samples are averaged the measurement should be reflected in the Signal to Noise Ratio
             resource. Reference: 3GPP TS 38.215, clause 5.1.
             */
-            [Range("<7 to >12.5"), ResourceId(7), Operations("R"), Mandatory] long SINR;
+            [Range("<7 to >12.5"), ResourceId(7), Operations("R"), Mandatory] long SINR;  // physics: sinr, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             This resource indicates the cell selection receive value. See definition in 3GPP TS 36.304.
@@ -26027,7 +26027,7 @@ namespace org.lwm2m {
             /**
             Radio Received Signal Strength Indicator.
             */
-            [Range("-30..-120"), ResourceId(4), Operations("R"), Units("dBm"), Mandatory] long[,,] RSSI;
+            [Range("-30..-120"), ResourceId(4), Operations("R"), Units("dBm"), Mandatory] long[,,] RSSI;  // physics: rssi, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Current battery capacity in percentage Energy Level (EL).
@@ -26504,7 +26504,7 @@ namespace org.lwm2m {
             /**
             Available ROM Size of the RCU (expressed in gigabyte).
             */
-            [ResourceId(8), Operations("R"), Units("GB"), Mandatory] long RCU_ROM_Available_Size;
+            [ResourceId(8), Operations("R"), Units("GB"), Mandatory] long RCU_ROM_Available_Size;  // physics: rcu rom available size, GB, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             Total storage of the RCU SD card, for example: 128G.
@@ -26514,7 +26514,7 @@ namespace org.lwm2m {
             /**
             Available storage of the RCU SD card, for example: 63G.
             */
-            [ResourceId(10), Operations("R"), Units("GB"), Mandatory] long SD_Available_Storage;
+            [ResourceId(10), Operations("R"), Units("GB"), Mandatory] long SD_Available_Storage;  // physics: sd available storage, GB, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             RCU GPS location, contains the referrence to Location(6).
@@ -26759,7 +26759,7 @@ namespace org.lwm2m {
             /**
             Available storage of the CCU.
             */
-            [ResourceId(6), Operations("R"), Units("GB"), Mandatory] long CCU_Available_Storage;
+            [ResourceId(6), Operations("R"), Units("GB"), Mandatory] long CCU_Available_Storage;  // physics: ccu available storage, GB, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             The time in seconds that the device has been on. Writing a value of 0 resets the counter.
@@ -26899,7 +26899,7 @@ namespace org.lwm2m {
             /**
             Battery Temperature.
             */
-            [ResourceId(300), Operations("R"), Units("Cel"), Mandatory] long Battery_Temperature;
+            [ResourceId(300), Operations("R"), Units("Cel"), Mandatory] long Battery_Temperature;  // physics: battery temperature, Cel, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Environment Temperature.
@@ -29837,7 +29837,7 @@ namespace org.lwm2m {
             If the Maximum Event Count (for a given Event Code) is set to -1, the number of events recorded is
             unconstrained.
             */
-            [ResourceId(8), Operations("RW")] long[,,] Maximum_Event_Count;
+            [ResourceId(8), Operations("RW")] long[,,] Maximum_Event_Count;  // physics: maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -29958,7 +29958,7 @@ namespace org.lwm2m {
             For more details on Network Measurement Report, refer to the appropriate 3GPP  standards, (e.g. for LTE refer
             to 3GPP TS 36.133).
             */
-            [ResourceId(5), Operations("R"), Units("dBm"), Mandatory] long Radio_Signal_Strength;
+            [ResourceId(5), Operations("R"), Units("dBm"), Mandatory] long Radio_Signal_Strength;  // physics: radio signal strength, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             This contains received link quality  e.g. RxQual Downlink for GSM (range 0...7, refer to 3GPP TS 44.018 for
@@ -29971,7 +29971,7 @@ namespace org.lwm2m {
             SINR: Signal to Interference plus Noise Ratio SINR is the ratio of the strength of the received signal to the
             strength of the received interference signal (noise and interference).
             */
-            [ResourceId(7), Operations("R"), Units("dB")] long? SignalSNR;
+            [ResourceId(7), Operations("R"), Units("dB")] long? SignalSNR;  // physics: signalsnr, dB, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Indicates the Coverage Enhancement Level of the UE in the serving cell. The Coverage Enhancement levels are
@@ -30380,12 +30380,12 @@ namespace org.lwm2m {
             /**
             The average Received Signal Strength Indication (RSSI) over a specific period.
             */
-            [ResourceId(3), Operations("R"), Units("dBm")] long[,,] Average_RSSI;
+            [ResourceId(3), Operations("R"), Units("dBm")] long[,,] Average_RSSI;  // physics: average rssi, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             The instantaneous Received Signal Strength Indication (RSSI).
             */
-            [ResourceId(4), Operations("R"), Units("dBm")] long? Last_RSSI;
+            [ResourceId(4), Operations("R"), Units("dBm")] long? Last_RSSI;  // physics: last rssi, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Neighbor mode R represents "RX on when idle".
@@ -30435,7 +30435,7 @@ namespace org.lwm2m {
             Queued Message count. A non-zero Queued Message Count indicates that there are messages waiting to be
             delivered, and it can be useful for assessing the network's communication efficiency and load.
             */
-            [ResourceId(13), Operations("R"), Units("count")] long? Queued_Message_Count;
+            [ResourceId(13), Operations("R"), Units("count")] long? Queued_Message_Count;  // physics: queued message count, count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
         }
 
         // ═════════════════════════ 10486.xml: Thread CLI Command (urn:oma:lwm2m:x:10486) ═════════════════════════
@@ -31135,7 +31135,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -31327,7 +31327,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -31484,7 +31484,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -31812,7 +31812,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -31997,7 +31997,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -32190,7 +32190,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -32382,7 +32382,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -32563,7 +32563,7 @@ namespace org.lwm2m {
             /**
             The number of static objects indentified in the tank
             */
-            [ResourceId(11), Operations("RW"), Mandatory] long Static_Objects_Count;
+            [ResourceId(11), Operations("RW"), Mandatory] long Static_Objects_Count;  // physics: static objects count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The area of the roof or other surfaces that collects rainwater to be stored in the rainwater tank
@@ -32849,7 +32849,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
@@ -33613,12 +33613,12 @@ namespace org.lwm2m {
             /**
             Number of samples with 100% packet loss.
             */
-            [ResourceId(116), Operations("R")] long? Count_Full_Ping_Drop;
+            [ResourceId(116), Operations("R")] long? Count_Full_Ping_Drop;  // physics: count full ping drop, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of samples marked as obstructed.
             */
-            [ResourceId(117), Operations("R")] long? Count_Obstructed;
+            [ResourceId(117), Operations("R")] long? Count_Obstructed;  // physics: count obstructed, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             JSON array containing latency distribution by deciles (10th, 20th, ... 90th percentile).
@@ -33845,32 +33845,32 @@ namespace org.lwm2m {
             /**
             Total number of bytes transmitted on this interface since last counter reset or system boot.
             */
-            [ResourceId(7), Operations("R"), Units("B"), Mandatory] long Total_Bytes_Sent;
+            [ResourceId(7), Operations("R"), Units("B"), Mandatory] long Total_Bytes_Sent;  // physics: total bytes sent, B, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of bytes received on this interface since last counter reset or system boot.
             */
-            [ResourceId(8), Operations("R"), Units("B"), Mandatory] long Total_Bytes_Received;
+            [ResourceId(8), Operations("R"), Units("B"), Mandatory] long Total_Bytes_Received;  // physics: total bytes received, B, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets transmitted on this interface since last counter reset or system boot.
             */
-            [ResourceId(9), Operations("R")] long? Total_Packets_Sent;
+            [ResourceId(9), Operations("R")] long? Total_Packets_Sent;  // physics: total packets sent, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of packets received on this interface since last counter reset or system boot.
             */
-            [ResourceId(10), Operations("R")] long? Total_Packets_Received;
+            [ResourceId(10), Operations("R")] long? Total_Packets_Received;  // physics: total packets received, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of transmission errors encountered on this interface.
             */
-            [ResourceId(11), Operations("R")] long? Transmit_Errors;
+            [ResourceId(11), Operations("R")] long? Transmit_Errors;  // physics: transmit errors, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of receive errors encountered on this interface including CRC errors, frame errors, etc.
             */
-            [ResourceId(12), Operations("R")] long? Receive_Errors;
+            [ResourceId(12), Operations("R")] long? Receive_Errors;  // physics: receive errors, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Enable or disable the interface administratively. When disabled, the interface is brought down regardless of
@@ -33942,7 +33942,7 @@ namespace org.lwm2m {
             Total number of button press events detected since last counter reset or system boot. Only applicable for
             button type GPIOs.
             */
-            [ResourceId(8), Operations("R")] long? Button_Press_Count;
+            [ResourceId(8), Operations("R")] long? Button_Press_Count;  // physics: button press count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
         }
 
         // ═════════════════════════ 10516.xml: USB Management (urn:oma:lwm2m:x:10516) ═════════════════════════
@@ -34050,7 +34050,7 @@ namespace org.lwm2m {
             /**
             Total storage capacity in kibibytes.
             */
-            [ResourceId(3), Operations("R"), Units("KiB"), Mandatory] long Total_Capacity;
+            [ResourceId(3), Operations("R"), Units("KiB"), Mandatory] long Total_Capacity;  // physics: total capacity, KiB, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Currently used storage space in kibibytes.
@@ -34060,7 +34060,7 @@ namespace org.lwm2m {
             /**
             Available free storage space in kibibytes.
             */
-            [ResourceId(5), Operations("R"), Units("KiB"), Mandatory] long Available_Capacity;
+            [ResourceId(5), Operations("R"), Units("KiB"), Mandatory] long Available_Capacity;  // physics: available capacity, KiB, hugs its ceiling, rare excursions down -> consider [V(max)]
 
             /**
             Storage usage as percentage of total capacity (0-100%).
@@ -34143,7 +34143,7 @@ namespace org.lwm2m {
             /**
             Total system RAM in kibibytes.
             */
-            [ResourceId(3), Operations("R"), Units("KiB"), Mandatory] long RAM_Total;
+            [ResourceId(3), Operations("R"), Units("KiB"), Mandatory] long RAM_Total;  // physics: ram total, KiB, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Currently used RAM in kibibytes (excluding cached and buffered memory).
@@ -34168,7 +34168,7 @@ namespace org.lwm2m {
             /**
             Total swap space in kibibytes. Returns 0 if swap is not configured.
             */
-            [ResourceId(8), Operations("R"), Units("KiB")] long? Swap_Total;
+            [ResourceId(8), Operations("R"), Units("KiB")] long? Swap_Total;  // physics: swap total, KiB, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Currently used swap space in kibibytes. High swap usage may indicate memory pressure.
@@ -34198,7 +34198,7 @@ namespace org.lwm2m {
             /**
             Total number of running processes on the system.
             */
-            [ResourceId(14), Operations("R")] long? Process_Count;
+            [ResourceId(14), Operations("R")] long? Process_Count;  // physics: process count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
         }
 
         // ═════════════════════════ 10519.xml: Hardware Watchdog (urn:oma:lwm2m:x:10519) ═════════════════════════
@@ -34258,13 +34258,13 @@ namespace org.lwm2m {
             Total number of successful watchdog reset operations since the last system boot or watchdog restart. This
             counter is useful for verifying watchdog activity and debugging.
             */
-            [ResourceId(8), Operations("R")] long? Pet_Count;
+            [ResourceId(8), Operations("R")] long? Pet_Count;  // physics: pet count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of times the watchdog has triggered a system reboot. This value is typically persisted across reboots
             to track system stability. A high value may indicate system instability or software issues.
             */
-            [ResourceId(9), Operations("R")] long? Trigger_Count;
+            [ResourceId(9), Operations("R")] long? Trigger_Count;  // physics: trigger count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             The file system path to the watchdog device, typically "/dev/watchdog" on Linux systems. This is informational
@@ -34282,7 +34282,7 @@ namespace org.lwm2m {
             Total number of system boots detected. When combined with Trigger Count, this helps determine the ratio of
             watchdog-triggered reboots versus normal reboots.
             */
-            [ResourceId(12), Operations("R")] long? Boot_Count;
+            [ResourceId(12), Operations("R")] long? Boot_Count;  // physics: boot count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Execute this resource to manually reset the watchdog timer. This operation writes to the watchdog device to
@@ -34463,12 +34463,12 @@ namespace org.lwm2m {
             /**
             Total number of I/O transactions performed on this socket.
             */
-            [ResourceId(42), Operations("R")] long? Transaction_Count;
+            [ResourceId(42), Operations("R")] long? Transaction_Count;  // physics: transaction count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of errors encountered on this socket.
             */
-            [ResourceId(43), Operations("R")] long? Error_Count;
+            [ResourceId(43), Operations("R")] long? Error_Count;  // physics: error count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Socket uptime in seconds since last initialization.
@@ -34922,7 +34922,7 @@ namespace org.lwm2m {
             investigation. Use Reset Counters to clear for new monitoring periods. Useful for SLA tracking and identifying
             problematic interfaces.
             */
-            [ResourceId(14), Operations("R")] long? Failover_Count;
+            [ResourceId(14), Operations("R")] long? Failover_Count;  // physics: failover count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Enable connection tracking to maintain existing connections through same interface (sticky sessions). When
@@ -35138,7 +35138,7 @@ namespace org.lwm2m {
             Threshold, the state transitions to DEGRADED. When it reaches the full Failure Threshold, the state
             transitions to UNHEALTHY. Provides visibility into how close the interface is to being marked down.
             */
-            [ResourceId(16), Operations("R"), Mandatory] long Consecutive_Failures;
+            [ResourceId(16), Operations("R"), Mandatory] long Consecutive_Failures;  // physics: consecutive failures, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Current count of consecutive successful probes. Increments with each success, resets to 0 on any failure. Used
@@ -35154,7 +35154,7 @@ namespace org.lwm2m {
             percentage calculation. Provides context for other statistics - higher values indicate more
             established/reliable statistics. Reset to 0 when statistics are reset.
             */
-            [ResourceId(18), Operations("R"), Mandatory] long Total_Probes;
+            [ResourceId(18), Operations("R"), Mandatory] long Total_Probes;  // physics: total probes, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Total number of failed probes since monitoring started or statistics were last reset. Increments with each
@@ -35471,7 +35471,7 @@ namespace org.lwm2m {
             indicate cleaner spectrum. Good: -95 to -90 dBm. Fair: -90 to -85 dBm. Poor: -85 to -75 dBm. High noise floors
             reduce signal-to-noise ratio and degrade performance. Measured via iw survey dump.
             */
-            [ResourceId(7), Operations("R"), Units("dBm")] long? Noise_Floor;
+            [ResourceId(7), Operations("R"), Units("dBm")] long? Noise_Floor;  // physics: noise floor, dBm, centred, excursions both ways -> consider [X(amplitude)]
 
             /**
             Composite interference score (0-100) calculated from neighboring AP count, channel utilization, and noise
@@ -35633,7 +35633,7 @@ namespace org.lwm2m {
             controller restarts as devices are stored in persistent storage. Use this to monitor fabric size and detect
             unexpected device removals.
             */
-            [ResourceId(1), Operations("R"), Mandatory] long Commissioned_Devices_Count;
+            [ResourceId(1), Operations("R"), Mandatory] long Commissioned_Devices_Count;  // physics: commissioned devices count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Thread network name for Border Router functionality. Used when commissioning Thread-based Matter devices.
@@ -36010,7 +36010,7 @@ namespace org.lwm2m {
             monitoring. High device count may indicate network scaling needs. Sudden drops may indicate network issues.
             Value 0 normal when network first created.
             */
-            [ResourceId(8), Operations("R")] long? Devices_Count;
+            [ResourceId(8), Operations("R")] long? Devices_Count;  // physics: devices count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Execute to create Thread network with configured parameters. Validates all network configuration resources
@@ -36113,7 +36113,7 @@ namespace org.lwm2m {
             Total number of devices currently joined to the network (excluding coordinator). Updates automatically when
             devices join or leave. Maximum depends on coordinator hardware capabilities (typically 100-200 devices).
             */
-            [ResourceId(6), Operations("R"), Mandatory] long Device_Count;
+            [ResourceId(6), Operations("R"), Mandatory] long Device_Count;  // physics: device count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             64-bit IEEE MAC address of coordinator in hexadecimal format (16 characters). Globally unique identifier
@@ -36425,14 +36425,14 @@ namespace org.lwm2m {
             Total number of devices currently in group. Updates automatically when members added/removed. Empty groups
             (count=0) can be pre-created for future use. Monitor to ensure group commands reach all intended devices.
             */
-            [ResourceId(3), Operations("R"), Mandatory] long Member_Count;
+            [ResourceId(3), Operations("R"), Mandatory] long Member_Count;  // physics: member count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Number of scenes defined for this group. Scenes store device states (on/off, brightness, color) for instant
             recall. Maximum typically 16 scenes per group. Each scene has unique ID (0-254). Used for lighting presets and
             automation.
             */
-            [ResourceId(4), Operations("R")] long? Scene_Count;
+            [ResourceId(4), Operations("R")] long? Scene_Count;  // physics: scene count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Currently active scene ID (0-254). 0 indicates no scene active. Updated when Scene Recall is executed. Can be
@@ -37101,7 +37101,7 @@ namespace org.lwm2m {
             set, the number of events recorded is unconstrained. The intent of this resource is to control the number of
             events reported, particularly in the case of a faulty sensor.
             */
-            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;
+            [ResourceId(6018), Operations("RW")] long? Alarm_Maximum_Event_Count;  // physics: alarm maximum event count, floor at 0, unbounded above -> consider [A] while the typical value stays under ~2_000_000
 
             /**
             Maximum Event Period is a readable and writable resource used in conjunction with the Maximum Event Count
