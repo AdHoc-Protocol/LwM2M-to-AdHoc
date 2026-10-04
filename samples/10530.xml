@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Matter Device</Name>
+        <Description1><![CDATA[Individual Matter device representation. Device information, commissioning status, and endpoint management.]]></Description1>
+        <ObjectID>10530</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10530</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Node ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unique 64-bit Matter node identifier for this device within the fabric. Format: 16-character hex string (e.g., "0000000000000001"). Assigned during commissioning. Used for all Matter protocol operations including CASE session establishment, attribute interactions, and command invocation. Persists across device reboots and controller restarts. Essential for identifying specific devices in multi-device fabrics. Used as key parameter in all device interaction execute resources.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Vendor ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Matter Vendor ID from device's Basic Information cluster. 16-bit CSA-assigned identifier. Indicates device manufacturer. Used for device identification, firmware update targeting, and vendor-specific behavior. Read from device during commissioning. Examples: Philips Hue (0x100B), Samsung SmartThings (0x110A), Eve Systems (0x130A). Cross-reference with CSA vendor registry for full manufacturer details.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Product ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Matter Product ID from device's Basic Information cluster. 16-bit vendor-defined identifier. Identifies specific product model. Used with Vendor ID for unique device identification. Essential for firmware updates, feature detection, and product-specific integrations. Read from device during commissioning. Example: A vendor might use 0x8001 for "Smart Bulb RGB" and 0x8002 for "Smart Bulb White".]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Device Type</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Primary Matter device type from root endpoint's Descriptor cluster. Indicates device functionality class. Standard types: 0x0100 (On/Off Light), 0x0101 (Dimmable Light), 0x010D (Extended Color Light), 0x000A (Door Lock), 0x0107 (Occupancy Sensor), 0x0302 (Temperature Sensor), 0x0301 (Thermostat), 0x0202 (Window Covering). Determines which clusters are required and expected device behavior. Essential for UI rendering and automation rule creation. See Device Type Name for human-readable equivalent.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Device Type Name</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable device type name derived from Device Type value. Examples: "On/Off Light", "Dimmable Light", "Extended Color Light", "Door Lock", "Occupancy Sensor", "Temperature Sensor", "Thermostat", "Window Covering", "Generic Switch". Automatically mapped from device type code. Used for display in user interfaces and logging. Simplifies device identification without requiring device type code lookup tables.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Endpoints</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[List of Matter endpoint IDs exposed by this device. Endpoint 0 (root) contains device-wide clusters (Basic Information, Descriptor). Endpoint 1+ contain application-specific clusters (OnOff, LevelControl, etc.). Multi-endpoint devices include: smart plugs with multiple outlets, ceiling fans with separate fan/light endpoints, combo sensors with multiple sensing functions. Use endpoint IDs in attribute read/write and command execute operations. Query Descriptor cluster on each endpoint to discover supported clusters.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Reachable</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current device reachability status. True: device is online and CASE session can be established. False: device is offline, unreachable, or sleeping. Updated automatically based on operational discovery (mDNS), CASE session health, and subscription status. For sleepy devices (battery-powered sensors), may show false when device is in sleep mode. Check Last Seen timestamp to determine how long device has been unreachable. Use Interact execute resource with "ping" command to force reachability check.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Firmware Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Device firmware version from Basic Information cluster's SoftwareVersion attribute. Vendor-specific format, typically semantic versioning (e.g., "1.2.3", "v2.0.1-beta"). Updated when device firmware is updated via OTA. Essential for tracking device firmware state, identifying devices needing updates, and troubleshooting version-specific issues. May be empty if device doesn't support or report firmware version. Compare against latest available firmware to determine update availability.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Serial Number</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Device serial number from Basic Information cluster's SerialNumber attribute. Vendor-specific format, typically alphanumeric. Uniquely identifies specific device unit. Used for warranty tracking, RMA processes, support ticket identification. May be empty if device doesn't provide serial number. Essential for device lifecycle management and support operations. Example formats: "ABC-123456", "2021-001-XYZ", "SN123456789".]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Product Name</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Device product name from Basic Information cluster's ProductName attribute. Human-readable product marketing name. Examples: "Hue White and Color Ambiance", "Smart Door Lock Pro", "Eve Motion Sensor". Used for display in user interfaces. More descriptive than Device Type Name. May include brand name, product line, and model designation. Essential for user-friendly device identification in applications and dashboards.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Last Seen</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of last successful communication with device. Updated on: CASE session establishment, attribute read/write success, command execution success, subscription report reception. Value 0 indicates device never successfully contacted since commissioning. Use to detect offline devices and calculate uptime statistics. For sleepy devices, reflects last wake-up and check-in time. Compare with current time to determine offline duration. Useful for alerting on devices that haven't been seen for extended periods.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>IP Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current IP address of device (IPv4 or IPv6). Obtained from operational discovery (mDNS) or CASE session establishment. Format: "192.168.1.100" (IPv4) or "fe80::1" (IPv6). May change due to DHCP lease renewal or network reconfiguration. Empty for Thread-only devices accessed via Border Router. Updated automatically when device is rediscovered. Useful for network diagnostics, traffic analysis, and troubleshooting connectivity issues. May show Border Router IP for Thread devices.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>RSSI</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>-127..0</RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Received Signal Strength Indicator in dBm. Indicates wireless signal quality for WiFi or Thread devices. Typical ranges: -30 to -50 dBm (excellent), -50 to -70 dBm (good), -70 to -80 dBm (fair), -80 to -90 dBm (poor), below -90 dBm (unreliable). Value 0 indicates wired connection or RSSI not available. Updated during device communication. Use for diagnosing connectivity issues, optimizing device placement, and identifying devices with weak signal. Not applicable for Ethernet-connected devices.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Interact</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute high-level device interaction commands. Supported commands: "ping" (test connectivity, update device info), "refresh" (query current state), "on" (turn on OnOff devices), "off" (turn off), "toggle" (toggle OnOff state). Arguments: simple command string. Returns immediately; check Reachable and Last Seen for result. Provides convenient shortcuts for common operations without requiring detailed cluster knowledge. Use for simple device control and health checks. Example: write "toggle" to toggle a light bulb's on/off state.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Read Attribute</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to read any Matter cluster attribute. Argument format: "endpoint:cluster:attribute" (decimal or hex). Examples: "1:6:0" (read OnOff state from endpoint 1, cluster 0x0006, attribute 0x0000), "1:0x0008:0x0000" (read current level). Establishes CASE session if needed. Returns attribute value in type-appropriate format. Supports all Matter attribute types. Use for custom device queries not covered by standard resources. Requires knowledge of Matter cluster specifications. Check Matter cluster library documentation for cluster/attribute IDs.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Write Attribute</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to write any Matter cluster attribute. Argument format: "endpoint:cluster:attribute:value". Examples: "1:6:0:1" (turn on), "1:8:0:128" (set level to 50%), "1:0x0300:0x0000:120" (set hue). Validates attribute is writable per Matter specification. Establishes CASE session if needed. Returns success/failure. Some attributes require specific permissions or conditions. Use for advanced device control and configuration. Requires knowledge of Matter cluster specifications and attribute data types.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Send Command</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to send any Matter cluster command. Argument format: "endpoint:cluster:command:args" where args is JSON-encoded command fields. Examples: "1:6:1:" (OnOff On command), "1:8:0:{\"level\":128,\"transitionTime\":10}" (MoveToLevel), "1:0x0101:0:{\"pinCode\":\"1234\"}" (DoorLock Lock). Establishes CASE session if needed. Returns command response if applicable. Supports all Matter command types. Essential for device actuation beyond simple on/off. Requires knowledge of Matter cluster command specifications and parameter encoding.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

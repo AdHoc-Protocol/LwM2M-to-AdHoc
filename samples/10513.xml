@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Router Management</Name>
+        <Description1><![CDATA[This LwM2M Object provides core router configuration and management capabilities for OpenWRT-based routers. It enables remote management of network parameters including LAN/WAN configuration, DHCP server settings, DNS configuration, and firewall controls. The object supports common router functions essential for IoT gateway deployments.]]></Description1>
+        <ObjectID>10513</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10513</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Router Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Router hostname/device name. This name is used for network identification and management purposes.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>LAN IP Address</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Router's LAN-side IP address in dotted decimal notation (e.g., "192.168.1.1").]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>LAN Subnet Mask</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[LAN subnet mask in dotted decimal notation (e.g., "255.255.255.0") or CIDR notation.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>DHCP Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable the DHCP server on the LAN interface. When enabled, the router automatically assigns IP addresses to LAN clients.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>DHCP Start IP</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Starting IP address of the DHCP pool (e.g., "192.168.1.100"). This defines the first address that can be assigned to DHCP clients.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>DHCP End IP</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Ending IP address of the DHCP pool (e.g., "192.168.1.250"). This defines the last address that can be assigned to DHCP clients.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>DHCP Lease Time</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>60..86400</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[DHCP lease duration in seconds. Default is typically 12 hours (43200 seconds). Range: 1 minute to 24 hours.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>DNS Server 1</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Primary DNS server IP address provided to DHCP clients (e.g., "8.8.8.8").]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>DNS Server 2</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Secondary DNS server IP address provided to DHCP clients for redundancy.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>WAN Connection Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[WAN connection type: 0=DHCP (automatic), 1=Static IP, 2=PPPoE.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>WAN IP Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current WAN-side IP address assigned to the router. This is read-only and shows the active WAN IP.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>WAN Gateway</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current WAN gateway IP address (default route). Read-only.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Firewall Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable the router firewall. When disabled, all traffic is permitted (not recommended).]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>NAT Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable Network Address Translation (NAT) for LAN to WAN connections.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>UPnP Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable Universal Plug and Play (UPnP) for automatic port forwarding by LAN devices.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Apply Configuration</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to apply pending configuration changes to the router. Changes made to writable resources are committed and activated when this action is executed.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Reset to Defaults</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to reset all router configuration to factory default values. This action requires confirmation and may cause temporary network disruption.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

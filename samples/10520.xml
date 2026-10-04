@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>MIKROBUS</Name>
+        <Description1><![CDATA[This LwM2M Object provides comprehensive management and monitoring of MIKROBUS sockets and Click boards. MIKROBUS is a standard for add-on boards that defines a specific pinout with SPI, I2C, UART, PWM, GPIO, and analog interfaces. This object enables remote configuration of interfaces, GPIO control, Click board detection, and power management. Supports multiple instances for managing multiple MIKROBUS sockets on a device.]]></Description1>
+        <ObjectID>10520</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10520</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <!-- Socket Information (0-9) -->
+            <Item ID="0">
+                <Name>Socket ID</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[MIKROBUS socket number identifier (0, 1, 2, ...).]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Socket Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable socket name for identification.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Socket Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Socket enabled state. Write false to disable socket, true to enable.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Click Board Present</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[True if a Click board is detected in the socket.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Click Board Type</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board type or category (e.g., "Sensor", "Display", "Wireless").]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Power Voltage</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>mV</Units>
+                <Description><![CDATA[Socket power voltage in millivolts. Typical values: 3300 (3.3V) or 5000 (5V).]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Power State</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Socket power state. Write false to disable power, true to enable power to Click board.]]></Description>
+            </Item>
+
+            <!-- Click Board Information (10-19) -->
+            <Item ID="10">
+                <Name>Board Manufacturer</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board manufacturer name read from manifest.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Board Model</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board model number or name.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Board Firmware Version</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board firmware or driver version.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Board Serial Number</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board unique serial number.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Board Description</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable board description.]]></Description>
+            </Item>
+
+            <!-- Interface Configuration (20-29) -->
+            <Item ID="20">
+                <Name>Active Interface</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Active communication interface: 0=None, 1=SPI, 2=I2C, 3=UART.]]></Description>
+            </Item>
+            <Item ID="21">
+                <Name>I2C Address</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..127</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[I2C slave address (7-bit addressing).]]></Description>
+            </Item>
+            <Item ID="22">
+                <Name>SPI Mode</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[SPI mode (0-3) defining clock polarity and phase.]]></Description>
+            </Item>
+            <Item ID="23">
+                <Name>SPI Speed</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>Hz</Units>
+                <Description><![CDATA[SPI clock speed in Hertz.]]></Description>
+            </Item>
+            <Item ID="24">
+                <Name>UART Baud Rate</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B/s</Units>
+                <Description><![CDATA[UART baud rate in bits per second (e.g., 9600, 115200).]]></Description>
+            </Item>
+            <Item ID="25">
+                <Name>UART Data Bits</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>7..8</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[UART data bits (7 or 8).]]></Description>
+            </Item>
+            <Item ID="26">
+                <Name>UART Parity</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[UART parity: 0=None, 1=Odd, 2=Even.]]></Description>
+            </Item>
+            <Item ID="27">
+                <Name>UART Stop Bits</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[UART stop bits (1 or 2).]]></Description>
+            </Item>
+
+            <!-- GPIO and Analog (30-39) -->
+            <Item ID="31">
+                <Name>AN Value</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..3.3</RangeEnumeration>
+                <Units>V</Units>
+                <Description><![CDATA[Analog (AN) pin input voltage in volts.]]></Description>
+            </Item>
+            <Item ID="32">
+                <Name>PWM Duty Cycle</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..100</RangeEnumeration>
+                <Units>%</Units>
+                <Description><![CDATA[PWM duty cycle percentage (0-100%).]]></Description>
+            </Item>
+            <Item ID="33">
+                <Name>PWM Frequency</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>Hz</Units>
+                <Description><![CDATA[PWM frequency in Hertz.]]></Description>
+            </Item>
+            <Item ID="34">
+                <Name>INT Pin State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Interrupt (INT) pin state. True=high, false=low.]]></Description>
+            </Item>
+            <Item ID="35">
+                <Name>RST Pin State</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Reset (RST) pin state. Write false to assert reset (active low), true to deassert.]]></Description>
+            </Item>
+            <Item ID="36">
+                <Name>CS Pin State</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Chip Select (CS) pin state for SPI. Write false to activate (active low), true to deactivate.]]></Description>
+            </Item>
+
+            <!-- Status and Diagnostics (40-49) -->
+            <Item ID="40">
+                <Name>Communication Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Communication status: 0=OK, 1=Error, 2=Timeout, 3=Not Configured.]]></Description>
+            </Item>
+            <Item ID="41">
+                <Name>Last Error</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Last error message or status description.]]></Description>
+            </Item>
+            <Item ID="42">
+                <Name>Transaction Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of I/O transactions performed on this socket.]]></Description>
+            </Item>
+            <Item ID="43">
+                <Name>Error Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of errors encountered on this socket.]]></Description>
+            </Item>
+            <Item ID="44">
+                <Name>Uptime</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Socket uptime in seconds since last initialization.]]></Description>
+            </Item>
+
+            <!-- Control Actions (100-109) -->
+            <Item ID="101">
+                <Name>Init Click Board</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to initialize the Click board (enable power, detect board, configure interface).]]></Description>
+            </Item>
+            <Item ID="102">
+                <Name>Reset Click Board</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to reset the Click board via RST pin.]]></Description>
+            </Item>
+            <Item ID="103">
+                <Name>Shutdown Click Board</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to shutdown the Click board (disable power, reset interface).]]></Description>
+            </Item>
+            <Item ID="110">
+                <Name>Read Manifest</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to read Click board manifest from EEPROM or I2C. Results available in Manifest Data (111).]]></Description>
+            </Item>
+            <Item ID="111">
+                <Name>Manifest Data</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Click board manifest data in JSON format containing manufacturer, model, serial number, and capabilities.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

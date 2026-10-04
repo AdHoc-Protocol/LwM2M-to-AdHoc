@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>VPN Configuration</Name>
+        <Description1><![CDATA[VPN tunnel configuration. OpenVPN, WireGuard, IPsec support with connection management and status monitoring.]]></Description1>
+        <ObjectID>10537</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10537</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>VPN Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unique identifier for this VPN connection (e.g., "corporate_vpn", "home_vpn"). Used to distinguish between multiple VPN instances and for configuration file naming. Must be unique across all VPN instances on the device.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Protocol Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[VPN protocol to use: 0=OpenVPN (SSL/TLS-based, widely compatible, good for restrictive networks), 1=WireGuard (modern, fast, lightweight, excellent mobile support), 2=IPsec/IKEv2 (industry standard, native support on many devices, good for site-to-site). Protocol selection affects available authentication methods and performance characteristics.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Server Address</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[VPN server hostname or IP address (IPv4 or IPv6). Can be a fully qualified domain name (e.g., "vpn.example.com") or direct IP address (e.g., "203.0.113.1"). The client will establish a VPN tunnel to this endpoint.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Server Port</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[VPN server port number (1-65535). Common defaults: OpenVPN=1194 (UDP) or 443 (TCP), WireGuard=51820, IPsec=500 (IKE) and 4500 (NAT-T). Port selection may be constrained by firewall rules and network policies.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Local Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Local IP address assigned to the VPN tunnel interface (read-only). This is the virtual IP address assigned by the VPN server and used for routing traffic through the tunnel. Automatically populated when the VPN connection is established. Format: IPv4 or IPv6 address with optional CIDR prefix.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Remote Network</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Remote network address in CIDR notation (e.g., "10.0.0.0/8", "192.168.1.0/24"). Specifies which destination networks should be routed through the VPN tunnel. For split tunneling, set this to specific subnets. For full tunnel, use "0.0.0.0/0" (all IPv4) or "::/0" (all IPv6). Can specify multiple networks separated by commas.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Authentication Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Authentication method: 0=Password (username/password authentication, simple but less secure), 1=Certificate (X.509 certificate-based, strongest security for OpenVPN/IPsec), 2=PSK (Pre-Shared Key, simple symmetric key authentication for IPsec), 3=Public Key (public key authentication, used for WireGuard). The chosen method determines which credential resources (Username, Password, Certificate, Keys) must be configured.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Username</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Username for password-based authentication. Required when Authentication Type is set to Password (0). Used in combination with the Password resource for OpenVPN user authentication or IPsec EAP authentication.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Password</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Password for password-based authentication. Required when Authentication Type is set to Password (0). Should be stored securely and transmitted over encrypted channels. Used with Username for VPN server authentication.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Certificate</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[X.509 client certificate in PEM format. Required when Authentication Type is set to Certificate (1). Used for OpenVPN or IPsec certificate-based authentication. Should include the full certificate chain from -----BEGIN CERTIFICATE----- to -----END CERTIFICATE-----, including any intermediate CA certificates.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Private Key</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Private key in PEM format. For certificate authentication (OpenVPN/IPsec), this is the RSA/ECDSA private key corresponding to the client certificate. For WireGuard, this is the WireGuard private key (base64-encoded). Must be kept strictly confidential. Format: -----BEGIN PRIVATE KEY----- to -----END PRIVATE KEY----- (or WireGuard base64 string).]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Public Key</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Public key (read-only). For WireGuard, this is the client's public key (base64-encoded), automatically derived from the private key. This value should be provided to the VPN server administrator for peer configuration. For other protocols, this field may be empty or contain the public key extracted from the certificate.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Pre-Shared Key</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Pre-Shared Key for PSK authentication or additional security. For IPsec, this is the shared secret used for PSK authentication. For WireGuard, this is an optional additional symmetric key for post-quantum security. Should be a strong random string, typically 32+ characters or base64-encoded binary data.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Connection State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..5</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current VPN connection state (read-only): 0=Disconnected (VPN is not active), 1=Connecting (VPN is attempting to establish connection), 2=Connected (VPN tunnel is active and operational), 3=Disconnecting (VPN is shutting down), 4=Error (VPN encountered an error, check Last Error resource), 5=Reconnecting (VPN is attempting to re-establish connection after interruption). Monitor this resource to track VPN status.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Bytes Sent</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total number of bytes transmitted through the VPN tunnel (read-only). Cumulative counter that increments as data is sent through the VPN interface. Useful for monitoring VPN usage, bandwidth consumption, and detecting abnormal traffic patterns. Counter resets when the VPN connection is terminated.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Bytes Received</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total number of bytes received through the VPN tunnel (read-only). Cumulative counter that increments as data is received through the VPN interface. Useful for monitoring VPN usage, bandwidth consumption, and network activity analysis. Counter resets when the VPN connection is terminated.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Uptime</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[VPN connection uptime in seconds (read-only). Duration for which the current VPN connection has been active and operational. Resets to 0 when the VPN disconnects or reconnects. Useful for monitoring connection stability and calculating availability metrics.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Last Error</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Description of the last error encountered (read-only). Contains a human-readable error message when the Connection State is Error (4) or when the last connection attempt failed. Common errors include: authentication failure, network unreachable, certificate validation errors, timeout. Empty string when no error has occurred. Check this resource when troubleshooting connection issues.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Keepalive Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..300</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Keepalive packet interval in seconds (1-300). The VPN client sends keepalive packets at this interval to maintain the connection through NAT gateways and firewalls, and to detect connection loss. Lower values provide faster detection of connection failures but increase network overhead. Typical values: 10-25 seconds. For WireGuard, this is the persistent keepalive interval. For OpenVPN, this affects ping/keepalive settings.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Reconnect Delay</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>5..600</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Delay before automatic reconnection attempt in seconds (5-600). When the VPN connection is lost unexpectedly, the client will wait this duration before attempting to reconnect. Prevents rapid reconnection loops and allows time for network issues to resolve. Typical values: 30-60 seconds. Exponential backoff may be applied after multiple failed attempts.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Split Tunnel</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable split tunneling mode. When enabled (true), only traffic destined for the Remote Network is routed through the VPN tunnel; all other traffic uses the default internet connection. When disabled (false), all traffic is routed through the VPN (full tunnel mode). Split tunneling improves performance for general internet access while protecting access to specific remote networks. Requires proper Remote Network configuration.]]></Description>
+            </Item>
+            <Item ID="21">
+                <Name>Kill Switch</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable VPN kill switch functionality. When enabled (true), all network traffic (except VPN traffic) is blocked if the VPN connection fails or disconnects, preventing accidental data leaks. When disabled (false), network traffic continues using the default route if VPN fails. Kill switch is implemented using firewall rules (iptables/nftables) to ensure no traffic bypasses the VPN when it should be active. Critical for privacy and security-sensitive applications.]]></Description>
+            </Item>
+            <Item ID="22">
+                <Name>Connect</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to establish the VPN connection. Validates configuration, saves settings to UCI, generates protocol-specific configuration files, and initiates the VPN tunnel. The Connection State resource will change to Connecting (1) and then Connected (2) upon success, or Error (4) upon failure. Check Last Error resource if connection fails. Automatically applies kill switch and split tunnel settings if configured.]]></Description>
+            </Item>
+            <Item ID="23">
+                <Name>Disconnect</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to terminate the VPN connection. Gracefully shuts down the VPN tunnel, removes kill switch firewall rules, clears routing table entries, and stops the VPN client process. The Connection State resource will change to Disconnecting (3) and then Disconnected (0). Safe to execute even if VPN is not connected. Traffic statistics (Bytes Sent, Bytes Received, Uptime) are reset to zero.]]></Description>
+            </Item>
+            <Item ID="24">
+                <Name>Restart</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to restart the VPN connection. Performs a full disconnect followed by reconnect sequence. Useful for applying configuration changes, recovering from connection issues, or refreshing credentials. Equivalent to executing Disconnect followed by Connect, but handled atomically. The connection will briefly enter Disconnecting (3) and Disconnected (0) states before transitioning to Connecting (1) and Connected (2).]]></Description>
+            </Item>
+            <Item ID="25">
+                <Name>Regenerate Keys</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to generate new cryptographic keys. For WireGuard, generates a new private/public key pair and updates the Private Key and Public Key resources. The new public key must be provided to the VPN server administrator for peer configuration. For other protocols, this operation may not be supported. Useful for key rotation and security maintenance. The VPN should be disconnected before regenerating keys to avoid connection disruption.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

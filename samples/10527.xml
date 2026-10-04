@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>WiFi Client Management</Name>
+        <Description1><![CDATA[Connected WiFi client tracking and management. Client statistics, signal strength, bandwidth usage, and access control.]]></Description1>
+        <ObjectID>10527</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10527</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>MAC Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[MAC address of the connected WiFi client in colon-separated hexadecimal format (e.g., "AA:BB:CC:DD:EE:FF"). This uniquely identifies each client device on the wireless network. Read-only value automatically populated when the client associates with the access point.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>IP Address</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[IPv4 address assigned to the client (e.g., "192.168.1.100"). Obtained from ARP cache or DHCP lease table. May be empty if the client hasn't completed network layer configuration or is using IPv6 only.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Hostname</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Hostname of the client device as provided during DHCP negotiation or resolved via DNS/mDNS. Useful for identifying devices by human-readable names. Shows "unknown" if hostname information is unavailable.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Interface</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Wireless interface to which this client is connected (e.g., "wlan0", "wlan1"). Identifies which physical or virtual access point interface is serving this client, important for multi-SSID or multi-radio configurations.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Signal Strength</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>-100..-30</RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Received Signal Strength Indicator (RSSI) in dBm (typical range: -100 to -30 dBm). Negative values closer to 0 indicate stronger signals. Values above -50 dBm are excellent, -50 to -60 dBm good, -60 to -70 dBm fair, below -70 dBm poor. Essential for troubleshooting connectivity issues and optimizing AP placement.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Noise Level</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>-100..-80</RangeEnumeration>
+                <Units>dBm</Units>
+                <Description><![CDATA[Background noise level on the wireless channel in dBm. Represents environmental RF interference. Typical WiFi noise floors range from -95 to -85 dBm. Used to calculate Signal-to-Noise Ratio (SNR).]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>SNR</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..70</RangeEnumeration>
+                <Units>dB</Units>
+                <Description><![CDATA[Signal-to-Noise Ratio in dB, calculated as (RSSI - Noise Level). Indicates signal quality relative to background noise. Higher values are better: >40 dB excellent, 25-40 dB good, 15-25 dB fair, <15 dB poor. More reliable than RSSI alone for assessing connection quality.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>TX Rate</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..9608</RangeEnumeration>
+                <Units>Mbit/s</Units>
+                <Description><![CDATA[Current transmit data rate from access point to client in Mbps. Dynamically adjusted based on signal quality and channel conditions. Maximum rates depend on WiFi standard: 802.11b (11 Mbps), 802.11g (54 Mbps), 802.11n (600 Mbps), 802.11ac (6933 Mbps), 802.11ax (9608 Mbps).]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>RX Rate</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..9608</RangeEnumeration>
+                <Units>Mbit/s</Units>
+                <Description><![CDATA[Current receive data rate from client to access point in Mbps. Dynamically adjusted based on signal quality and channel conditions. May differ from TX rate due to asymmetric channel conditions or client capabilities.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>TX Bytes</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total number of bytes transmitted from access point to client since connection establishment. Monotonically increasing counter useful for bandwidth usage monitoring and accounting. Resets to zero when client reconnects.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>RX Bytes</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>B</Units>
+                <Description><![CDATA[Total number of bytes received by access point from client since connection establishment. Monotonically increasing counter useful for bandwidth usage monitoring and accounting. Resets to zero when client reconnects.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Connected Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Duration in seconds since the client associated with the access point. Useful for session tracking and identifying long-running vs. transient connections. Resets when client reconnects.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Capability</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Highest 802.11 standard supported by the client as negotiated during association. Possible values: "802.11b", "802.11g", "802.11a", "802.11n", "802.11ac", "802.11ax". Parsed from client capability flags. Helps identify client device capabilities and potential performance bottlenecks.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Band</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Frequency band currently used by the client. Possible values: "2.4GHz" (2412-2484 MHz), "5GHz" (5170-5835 MHz), "6GHz" (5955-7115 MHz). Determined from the operating channel frequency. Essential for band steering operations and spectrum management.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Bandwidth</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>20,40,80,160</RangeEnumeration>
+                <Units>MHz</Units>
+                <Description><![CDATA[Channel bandwidth currently negotiated with the client in MHz. Possible values: 20 (legacy), 40 (802.11n+), 80 (802.11ac+), 160 (802.11ac/ax). Wider bandwidths provide higher throughput but are more susceptible to interference. Parsed from client capability flags.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>ACL State</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration>none,allowed,denied</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Access Control List state for this client. Values: "none" (no ACL policy applied), "allowed" (explicitly whitelisted), "denied" (explicitly blacklisted). Read-write resource that allows querying and modifying ACL state. Changes are applied to hostapd ACL configuration.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>QoS Priority</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..7</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Quality of Service priority level for this client (0-7, where 7 is highest priority). Maps to WMM/802.11e traffic categories. Higher priority clients receive preferential treatment for channel access and bandwidth allocation. Useful for prioritizing VoIP, video streaming, or critical IoT devices over best-effort traffic.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Isolated</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Client isolation flag. When true, this client is prevented from communicating directly with other wireless clients on the same SSID (AP isolation). Client can only communicate with the wired network/gateway. Enhances security for guest networks and public WiFi by preventing peer-to-peer attacks. False allows normal client-to-client communication.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Last Activity</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Time in seconds since the last frame transmission or reception from this client. Indicates client activity level. Low values (<10 seconds) indicate active communication, high values suggest idle or sleeping client. Useful for identifying stale connections and implementing inactivity-based disconnection policies.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Disconnect Client</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to forcibly disconnect the client from the access point. Sends 802.11 deauthentication frame via hostapd, immediately terminating the client's association. Client may automatically reconnect unless blocked by ACL. Useful for enforcing policies, troubleshooting, or manually managing network access.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Add to Blacklist</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to add the client's MAC address to the hostapd deny ACL (blacklist) and immediately disconnect it. Prevents the client from reconnecting until removed from the blacklist. Also sets ACL State to "denied". Useful for blocking unauthorized or problematic devices. Blacklist persists in hostapd runtime configuration but may need to be saved to UCI for persistence across reboots.]]></Description>
+            </Item>
+            <Item ID="21">
+                <Name>Add to Whitelist</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to add the client's MAC address to the hostapd accept ACL (whitelist). When whitelist mode is enabled on the AP, only whitelisted clients can connect. Also removes the MAC from deny list if present and sets ACL State to "allowed". Useful for implementing strict MAC-based authentication. Whitelist persists in hostapd runtime configuration but may need to be saved to UCI for persistence across reboots.]]></Description>
+            </Item>
+            <Item ID="22">
+                <Name>Steer to Band</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to steer the client to a different frequency band using 802.11v BSS Transition Management Request. Parameter should be target band: "2.4", "5", or "6" (as string). Sends BSS-TM request frame suggesting the client transition to an AP on the specified band. Requires 802.11v support in both AP (hostapd) and client device. Client may honor or ignore the request. Useful for load balancing and optimizing dual-band/tri-band deployments by moving capable clients to less congested bands.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

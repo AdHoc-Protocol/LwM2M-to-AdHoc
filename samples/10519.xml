@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Hardware Watchdog</Name>
+        <Description1><![CDATA[This LwM2M Object provides monitoring and management of hardware watchdog timers commonly found in embedded systems and IoT devices. The watchdog is a hardware timer that must be periodically reset ("petted") to prevent system reboot. This object enables remote configuration and monitoring of watchdog behavior, particularly useful for OpenWRT-based routers and similar embedded Linux devices.]]></Description1>
+        <ObjectID>10519</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10519</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Watchdog Enable</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable the hardware watchdog. When enabled, the watchdog timer must be periodically reset to prevent system reboot. When disabled, the watchdog is stopped and will not trigger a reboot.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Timeout</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..300</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[The watchdog timeout period in seconds. If the watchdog is not reset within this time period, the hardware will trigger a system reboot. Typical values range from 5 to 60 seconds. The actual timeout may be rounded to the nearest value supported by the hardware.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Pet Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..60</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[The interval at which the watchdog is automatically reset ("petted") by the system. This should be less than the timeout value. Typical values are 1/2 to 2/3 of the timeout period.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current watchdog status. Values: 0=Inactive (disabled), 1=Active (running normally), 2=Triggered (reboot in progress or imminent), 3=Error (watchdog device unavailable or malfunctioning).]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Last Pet Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of the last successful watchdog reset operation. This can be used to verify that the watchdog is being serviced regularly.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Magic Close Enable</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable the "magic close" feature. When enabled, writing a specific magic character ('V') to the watchdog device before closing allows proper shutdown of the watchdog. This is particularly relevant for OpenWRT systems using procd.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Pet Watchdog</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to manually reset the watchdog timer. This operation writes to the watchdog device to prevent an imminent timeout.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Reset Watchdog</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute this resource to reset the watchdog configuration to default values and restart the watchdog service.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Pet Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of successful watchdog reset operations since the last system boot or watchdog restart. This counter is useful for verifying watchdog activity and debugging.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Trigger Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of times the watchdog has triggered a system reboot. This value is typically persisted across reboots to track system stability. A high value may indicate system instability or software issues.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Device Path</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The file system path to the watchdog device, typically "/dev/watchdog" on Linux systems. This is informational and shows which hardware watchdog device is being used.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Hardware Timeout</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[The actual timeout value configured in the hardware watchdog device, as reported by the driver. This may differ from the requested timeout due to hardware limitations or driver rounding.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Boot Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of system boots detected. When combined with Trigger Count, this helps determine the ratio of watchdog-triggered reboots versus normal reboots.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

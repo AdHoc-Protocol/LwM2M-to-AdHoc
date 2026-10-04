@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- BSD-3 Clause License
+Copyright 2024 South East Water Corporation. 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its
+contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Water Tank</Name>
+        <Description1><![CDATA[This object provides site specific configuration for devices operating in a water tank.]]></Description1>
+        <ObjectID>10502</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10502</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Valve Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The type of discharge valve used:
+1. Valve Type 1 - Battery powered pump with feedback
+2. Valve Type 2 - Mains powered pump with feedback
+3. Valve Type 3 - Mains powered pump without feedback
+]]>             </Description>
+            </Item>
+            <Item ID="1">
+                <Name>Sensor Offset</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[Distance from the sensor face to the bottom of the tank measured in metres]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Tank Cross Section</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m2</Units>
+                <Description><![CDATA[Cross-Sectional area of the tank in m^2]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Tank GPS Location Longitude</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[GPS Location - Longitude of the device in the format [+/-]12.345678]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Tank GPS Location Latitude</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[GPS Location - Latitude of the device in the format [+/-]12.345678]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Minimum Tank Discharge Level</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[Minimum water level that the tank can be discharged to in metres]]></Description>
+            </Item>
+
+            <Item ID="6">
+                <Name>Valve State Validation Time</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[The amount of time to wait in seconds before validating the hardware state of the valve if feedback is configured]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Tank Reserve Pump Cut-In Level</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[The water level threshold above which the optional domestic usage pump is enabled if configured as Valve Type 1.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Tank Reserve Pump Cut-Out Level</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[The water level threshold below which the optional domestic usage pump is disabled if configured as Valve Type 1.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Maximum Discharge Time</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Maximum expected discharge duration in seconds. Used to limit the duration of any discharge event.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Static Objects</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m</Units>
+                <Description><![CDATA[The distances to static objects identified in the tank]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Static Objects Count</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The number of static objects indentified in the tank]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Catchment Area</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>m2</Units>
+                <Description><![CDATA[The area of the roof or other surfaces that collects rainwater to be stored in the rainwater tank]]></Description>
+            </Item>
+        </Resources>
+        <Description2></Description2>
+    </Object>
+</LWM2M>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Firewall Config</Name>
+        <Description1><![CDATA[This LwM2M Object provides management of firewall rules for OpenWRT-based routers. It enables remote configuration of iptables/nftables firewall rules including port filtering, IP address filtering, protocol filtering, and zone-based firewall management. Each instance represents a single firewall rule that can be created, modified, enabled/disabled, or deleted remotely. The object integrates with OpenWRT's UCI configuration system and supports both IPv4 and IPv6 rules.]]></Description1>
+        <ObjectID>10521</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10521</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Rule Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable name for this firewall rule. Used for identification in the UCI configuration and logging. Must be unique within the firewall configuration.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Rule Index</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Priority index of this rule in the firewall chain. Lower values indicate higher priority (processed first). This value is automatically assigned based on rule order in the configuration.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Enabled</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable or disable this firewall rule. When disabled, the rule remains in configuration but is not active in the firewall chain. Default is true (enabled).]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Action</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Action to take when packet matches this rule: 0=ACCEPT (allow the packet through), 1=REJECT (reject with ICMP error response), 2=DROP (silently discard the packet).]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Protocol</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[IP protocol to match: 0=ALL (any protocol), 1=TCP, 2=UDP, 3=ICMP. When set to ALL, port specifications are ignored.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Source IP</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Source IP address or CIDR network to match (e.g., "192.168.1.0/24", "10.0.0.1", or "0.0.0.0/0" for any). Supports IPv4 and IPv6 addresses. Empty string matches any source.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Source Port</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Source port number to match (1-65535). Value of 0 means match any source port. Only applicable when Protocol is TCP or UDP.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Destination IP</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Destination IP address or CIDR network to match (e.g., "192.168.1.0/24", "10.0.0.1"). Supports IPv4 and IPv6 addresses. Empty string matches any destination.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Destination Port</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..65535</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Destination port number to match (1-65535). Value of 0 means match any destination port. Only applicable when Protocol is TCP or UDP.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Interface</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Network interface name to which this rule applies (e.g., "eth0", "br-lan", "wan"). Empty string matches all interfaces.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Direction</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Traffic direction for rule matching: 0=INPUT (incoming traffic destined for router), 1=OUTPUT (outgoing traffic from router), 2=FORWARD (traffic routed through the router).]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Zone From</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Source firewall zone name for zone-based rules (e.g., "lan", "wan", "guest"). OpenWRT zone-based firewall integration.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Zone To</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Destination firewall zone name for zone-based rules (e.g., "lan", "wan", "guest"). Used with Zone From for inter-zone traffic rules.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Comment</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Optional comment or description for this rule. Used for documentation purposes and appears in iptables rule comments.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Apply Rule</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to apply this rule to the active firewall configuration. Saves the rule to UCI and reloads the firewall service.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Delete Rule</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to delete this rule from the firewall configuration. Removes the rule from UCI and reloads the firewall service.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

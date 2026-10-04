@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BSD-3 Clause License
+
+  Copyright 2024 autosen GmbH
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  1. Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+  3. Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived
+  from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+  COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+
+-->
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+  <Object ObjectType="MODefinition">
+    <Name>Periodic Sensor Upload</Name>
+    <Description1><![CDATA[The autosen Periodic Sensor Upload object can be used to upload sampled sensor data at periodic intervals]]></Description1>
+    <ObjectID>10495</ObjectID>
+    <ObjectURN>urn:oma:lwm2m:x:10495:1.1</ObjectURN>
+    <LWM2MVersion>1.0</LWM2MVersion>
+    <ObjectVersion>1.1</ObjectVersion>
+    <MultipleInstances>Multiple</MultipleInstances>
+    <Mandatory>Optional</Mandatory>
+    <Resources>
+		  <Item ID="0">
+        <Name>Sensor Sampler Path</Name>
+        <Type>Objlnk</Type>
+        <RangeEnumeration></RangeEnumeration>
+        <Operations>RW</Operations>
+        <Mandatory>Mandatory</Mandatory>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Description><![CDATA[Link to an object instance of the Periodic Sensor Sampler Object]]></Description>
+        <Units></Units>
+		  </Item>
+      <Item ID="1">
+        <Name>Upload Start Time</Name>
+        <Operations>RW</Operations>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Mandatory</Mandatory>
+        <Type>Integer</Type>
+        <RangeEnumeration>0..86399</RangeEnumeration>
+        <Description><![CDATA[Specifies the number of seconds after midnight UTC from which the upload should be started]]></Description>
+        <Units>s</Units>
+      </Item>
+      <Item ID="2">
+          <Name>Upload Interval</Name>
+          <Operations>RW</Operations>
+          <MultipleInstances>Single</MultipleInstances>
+          <Mandatory>Mandatory</Mandatory>
+          <Type>Integer</Type>
+          <RangeEnumeration>1..86399</RangeEnumeration>
+          <Description><![CDATA[Specifies the Interval at which the upload is to be repeated from the Upload Start Time.]]></Description>
+          <Units>s</Units>
+      </Item>
+      <Item ID="3">
+        <Name>Upload Count</Name>
+        <Type>Integer</Type>
+        <Operations>RW</Operations>
+        <Mandatory>Optional</Mandatory>
+        <MultipleInstances>Single</MultipleInstances>
+        <RangeEnumeration>1..86399</RangeEnumeration>
+        <Description><![CDATA[Specifies the number of intervals to be performed in the upload interval, starting from the Upload Start Time]]></Description>
+        <Units></Units>
+      </Item>
+            <Item ID="4">
+          <Name>Upload Days of the Week</Name>
+          <Type>Opaque</Type>
+          <Operations>RW</Operations>
+          <Mandatory>Optional</Mandatory>
+          <MultipleInstances>Single</MultipleInstances>     
+          <Description><![CDATA[Specifies the days of the week when an upload should occur. The value is a single byte (bitmask), where Bit 0 = Sunday, Bit 1 = Monday, ..., Bit 6 = Saturday]]></Description>
+      </Item>
+      <Item ID="6">
+          <Name>Upload Recurrence</Name>
+          <Type>Integer</Type>
+          <Operations>RW</Operations>
+          <Mandatory>Optional</Mandatory>
+          <MultipleInstances>Single</MultipleInstances>     
+          <Description><![CDATA[Specifies the Recurrence in days in which the Uploader will be executed. This works in combination with "Sampling Days of the Week" (ID 5),  
+        allowing finer control over when sampling occurs.]]></Description>
+      </Item>
+	  </Resources>
+	  <Description2 />
+  </Object>
+</LWM2M>

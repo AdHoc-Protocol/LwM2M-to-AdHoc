@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Zigbee Group</Name>
+        <Description1><![CDATA[Zigbee group management for collective device control. Group membership, scene management, and ZCL group commands.]]></Description1>
+        <ObjectID>10534</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10534</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Group ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..65527</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[16-bit group identifier (0x0001-0xFFF7). Must be unique within network. Used for group addressing in ZCL commands. Reserved ranges: 0x0000 (not allowed), 0xFFF8-0xFFFF (special broadcast groups). Configure before adding members.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Group Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Human-readable group name for identification and display (e.g., "Living Room Lights", "Kitchen Zone", "All Lights"). Maximum 16 characters. Used in user interfaces and automation rules. Should be descriptive and unique.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Member Devices</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[IEEE addresses (64-bit hex) of devices in group. Multiple resource instances, one per member. Automatically updated when devices join/leave group. Used for membership tracking and group management.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Member Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of devices currently in group. Updates automatically when members added/removed. Empty groups (count=0) can be pre-created for future use. Monitor to ensure group commands reach all intended devices.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Scene Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of scenes defined for this group. Scenes store device states (on/off, brightness, color) for instant recall. Maximum typically 16 scenes per group. Each scene has unique ID (0-254). Used for lighting presets and automation.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Current Scene</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..254</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Currently active scene ID (0-254). 0 indicates no scene active. Updated when Scene Recall is executed. Can be written to recall specific scene. Used to track and restore lighting states.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Add Member</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to add device to group. Argument: 64-bit IEEE address (8 bytes). Sends ZCL Add Group command to device. Device must support Groups cluster. Verify membership via Member Count after execution. Can add multiple devices by executing repeatedly.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Remove Member</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to remove device from group. Argument: 64-bit IEEE address (8 bytes). Sends ZCL Remove Group command to device. Device will no longer respond to group commands. Useful for reconfiguring zones or decommissioning devices.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Scene Recall</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to recall stored scene. Argument: scene ID (0-254, 1 byte). Restores all group member states to scene settings instantly (<1 second). Used for lighting presets, automation, and mood setting. Scene must exist or command fails.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Scene Store</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to store current group state as scene. Argument: scene ID (0-254, 1 byte). Captures on/off, brightness, color state of all members. Overwrites scene if ID exists. Used to create lighting presets. Increment Scene Count after storage.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>On</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to turn on all devices in group. Sends ZCL On command (cluster 0x0006, command 0x01) to group address. All devices respond simultaneously. Applies to lights, switches, outlets. Instant synchronized activation.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Off</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to turn off all devices in group. Sends ZCL Off command (cluster 0x0006, command 0x00) to group address. All devices deactivate simultaneously. Master switch functionality for zones or entire system.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Toggle</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to toggle all devices in group. Sends ZCL Toggle command (cluster 0x0006, command 0x02). Devices currently on will turn off, off devices turn on. Note: Mixed states may result in unexpected behavior. Best used with synchronized groups.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Set Level</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to set brightness level for all dimmable devices in group. Argument: level 0-254 (1 byte). 0=minimum, 254=maximum brightness. Sends ZCL Move to Level command (cluster 0x0008). Instant or timed transition depending on device capabilities.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Set Color</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to set color for all color-capable devices in group. Arguments: hue (0-254), saturation (0-254) - 2 bytes total. Sends ZCL Move to Hue and Saturation command (cluster 0x0300). Only affects devices with color control capability.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

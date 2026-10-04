@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>WAN Failover Policy</Name>
+        <Description1><![CDATA[Multi-WAN failover configuration. Priority-based WAN selection, failover triggers, and load balancing policies.]]></Description1>
+        <ObjectID>10525</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10525</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Multiple</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Policy Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unique identifier name for this failover policy (e.g., "critical_services", "office_wan"). Used to reference the policy in routing rules and mwan3 configuration. Must be alphanumeric with underscores, no spaces.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Primary WAN</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Primary WAN interface name (e.g., "wan", "eth1"). This is the preferred interface that will be used under normal conditions. Must be a valid network interface name that exists on the system. In failover mode, all traffic uses this interface unless it becomes unavailable.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Secondary WAN</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Secondary WAN interface name (e.g., "wan2", "usb0"). Backup interface that becomes active when primary fails or shares load in load-balancing mode. Must be a valid network interface. Can be left empty if only one WAN is available.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Tertiary WAN</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Tertiary WAN interface name (e.g., "wan3", "wwan0"). Third-level backup interface for maximum redundancy. Used when both primary and secondary interfaces fail, or participates in multi-WAN load balancing. Optional for deployments requiring three or more WAN connections.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Mode</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Failover policy mode: 0=Failover (use primary, switch to backup only on failure), 1=Load Balance (distribute traffic across interfaces based on weights), 2=Round Robin (distribute connections evenly regardless of weights). Failover mode prioritizes primary interface. Load Balance mode uses weight ratios for traffic distribution. Round Robin mode distributes new connections sequentially across all available interfaces.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Primary Weight</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Traffic weight for primary WAN interface in load-balancing mode (range: 1-100). Higher values direct more traffic to this interface. For example, primary weight 70 + secondary weight 30 results in 70% of traffic using primary. Ignored in pure failover mode. Weights are relative to total of all interface weights.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Secondary Weight</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Traffic weight for secondary WAN interface in load-balancing mode (range: 1-100). Used to control the proportion of traffic sent through the secondary interface. Set based on interface capacity - for example, if secondary has half the bandwidth of primary, use half the weight.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Tertiary Weight</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..100</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Traffic weight for tertiary WAN interface in load-balancing mode (range: 1-100). Allows fine-tuning of traffic distribution across three WAN connections. Particularly useful for asymmetric bandwidth scenarios where tertiary link has different capacity than primary and secondary.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Failover Threshold</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>1..20</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of consecutive failed health check pings before triggering failover (range: 1-20 pings). Lower values enable faster failover but may cause unnecessary switches due to transient issues. Higher values provide stability but slower failure detection. Common values: 3 for responsive failover, 5 for balanced, 10 for very stable connections. Health checks typically run every 10 seconds.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Failback Mode</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Failback behavior when primary interface is restored: 0=Immediate (switch back as soon as primary is healthy), 1=Delayed (wait for configured delay period to ensure stability), 2=Manual (only failback when explicitly commanded). Immediate mode maximizes use of primary link but may cause connection disruption if primary is flapping. Delayed mode adds stability. Manual mode provides maximum control for maintenance scenarios.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Failback Delay</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..3600</RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[Time to wait before failing back to primary WAN after it recovers (range: 0-3600 seconds). Only applicable when Failback Mode is set to Delayed (1). Ensures primary interface is truly stable before switching back. Recommended values: 60 seconds for quick failback, 300 seconds (5 minutes) for cautious approach. Zero delay with delayed mode behaves like immediate mode.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Current Active WAN</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Currently active WAN interface name (read-only). Shows which interface is actively routing traffic. In failover mode, this is the single active interface. In load-balancing/round-robin modes, this shows the primary routing interface. Updated automatically based on real-time interface health status and failover events. Empty string indicates no WAN is currently active.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Policy State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current operational state of the failover policy: 0=Inactive (policy configured but not applied to routing), 1=Active (policy is running and managing WAN failover), 2=Error (policy application failed or runtime error occurred). Check this after executing Apply Policy to verify success. Error state may indicate invalid interface names, mwan3 configuration issues, or system resource problems.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Last Failover Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp of the most recent failover event (read-only). Records when the system last switched from one WAN interface to another due to failure detection. Value is 0 if no failover has occurred since policy activation. Useful for monitoring failover frequency and correlating with network events. Can be reset using Reset Counters execute resource.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Failover Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of failover events since policy activation or last counter reset (read-only). Increments each time the system switches from one WAN to another. High values may indicate unstable WAN connections requiring investigation. Use Reset Counters to clear for new monitoring periods. Useful for SLA tracking and identifying problematic interfaces.]]></Description>
+            </Item>
+            <Item ID="15">
+                <Name>Sticky Connections</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Enable connection tracking to maintain existing connections through same interface (sticky sessions). When enabled (true), active connections continue using their original WAN interface even during load rebalancing or after interface recovery. When disabled (false), new routing decisions apply immediately to all traffic. Enable for services requiring consistent source IP (VPN, banking, streaming). Disable for maximum load distribution flexibility.]]></Description>
+            </Item>
+            <Item ID="16">
+                <Name>Interface Rules</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Policy-based routing rules in format "interface:protocol:port" (e.g., "wan:tcp:443", "wan2:udp:53"). Forces specific traffic types to use designated WAN interfaces regardless of failover policy. Multiple rules can be defined for granular traffic control. Useful for scenarios like routing VoIP through high-quality WAN, gaming through low-latency WAN, or backup traffic through secondary WAN. Protocol can be tcp, udp, icmp, or all. Port can be specific number or range.]]></Description>
+            </Item>
+            <Item ID="17">
+                <Name>Apply Policy</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to apply the current failover policy configuration to the system. Validates interface existence, writes mwan3 configuration files, sets up health check monitors for all configured WANs, configures policy-based routing tables, applies load balancing weights (if applicable), and restarts the mwan3 service. After execution, check Policy State to verify successful application. This operation may briefly interrupt active connections during mwan3 restart.]]></Description>
+            </Item>
+            <Item ID="18">
+                <Name>Force Failover</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to manually trigger immediate failover to the next available WAN interface in priority order (primary → secondary → tertiary). Overrides health check status and forces interface switch. Useful for maintenance scenarios, testing failover procedures, or manually recovering from detected issues. Updates Current Active WAN, Last Failover Time, and increments Failover Count. Does not change policy configuration.]]></Description>
+            </Item>
+            <Item ID="19">
+                <Name>Force Failback</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to manually trigger immediate failback to the primary WAN interface. Overrides failback mode and delay settings. Fails if primary interface is not available. Useful for completing maintenance windows, testing primary link restoration, or ending manual failover mode. Particularly important when Failback Mode is set to Manual (2), as this is the only way to restore primary WAN usage.]]></Description>
+            </Item>
+            <Item ID="20">
+                <Name>Reset Counters</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to reset failover statistics counters. Clears Failover Count to 0 and resets Last Failover Time to 0. Does not affect current operational state or active interface. Use at the start of new monitoring periods, after maintenance, or when beginning SLA measurement intervals. Provides clean baseline for tracking failover events and system stability.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

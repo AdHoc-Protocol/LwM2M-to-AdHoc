@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- BSD-3 Clause License
+
+Copyright 2025 South East Water Corporation.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its
+contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Leakage Detection Configuration</Name>
+        <Description1><![CDATA[This object provides timing and sampling frequency configuration for a vibration-based leakage detector]]></Description1>
+        <ObjectID>10509</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10509</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+		<ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Sample Times</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Sample Times is a readable and writable multi value resource used to control when leak detection vibration sampling should occur. This is an integer value representing seconds since midnight]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>Sample UTC Offset</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Sample UTC Offset resource is a readable and writable resource representing the time zone offset for this Leakage Detection Schedule instance. If this resource is empty, the application should use the UTC offset provided in the Device [/3/0/14] object instance resource or UTC if not provided.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Payload Type</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..2</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Payload Type is a readable and writeable resource used to indicate which payload type to report to the LWM2M server. Values are one of:-
+0: Disabled
+1: AUC (default)
+2: All Frequency Values
+
+Disabled (0)  The leak detection payload generation should be disabled.
+AUC (1)  For this mode, only the mean AUC (area under curve) for all samples in the sampling window within the defined frequency range will be delivered to the LwM2M server via the Latest Payload Resource
+All Frequency Values(2)  for this mode, the median for values for all frequency bands for all samples in the sampling window will be provided to the LwM2M server via the Latest Payload Resource
+]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Number Sample Windows</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..10</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Number Sample Windows resource is a readable and writeable resource used to determine how many instances to use for the Sample Times resource]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Samples Per Window</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Samples Per Window resource is a readable and writeable resource used to control how many samples to read per sample window]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Sample Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Multiple</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[The Sample Interval resource is a readable and writeable resource used to control the interval (in seconds) between each sample in a window]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>AUC Lower Frequency</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>Hz</Units>
+                <Description><![CDATA[The AUC Lower Frequency resource is a readable and writeable resource used to determine the lower frequency bound (inclusive) to use for calculating the AUC. This value will default to 360Hz if the resource is not set]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>AUC Upper Frequency</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>Hz</Units>
+                <Description><![CDATA[The AUC Upper Frequency resource is a readable and writeable resource used to determine the upper frequency bound (inclusive) to use for calculating the AUC. This value will default to 1200Hz if the resource is not set]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>AUC Leak Threshold</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The AUC Leak Threshold resource is a readable and writeable resource used to to compare the AUC of each sample in a sampling window. This value will default to 1000 if the resource is not set]]></Description>
+            </Item>
+            <Item ID="6003">
+                <Name>Interval Collection Start Time</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Collection Start Time resource is a read only resource representing the time when the first interval was recorded on the device. Interval times represent the end of the interval, not the beginning. As an example, the first four hourly interval past midnight will have a timestamp of 04:00 (adjusting for UTC offset). ]]></Description>
+            </Item>
+            <Item ID="6004">
+                <Name>Oldest Recorded Interval</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Oldest Recorded Interval resource is a read-only resource representing the oldest available interval on the device. Interval times represent the end of the interval, not the beginning.]]></Description>
+            </Item>
+            <Item ID="6005">
+                <Name>Last Delivered Interval</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Last Delivered Interval is a readable and writable resource used to represent the last interval delivered to the LwM2M server. Interval times represent the end of the interval, not the beginning. The setting of this resource is implementation specific but should be updated based on, either a Read request of the Latest Payload from the LwM2M server or via a confirmed delivery of Notify operation of the Latest Payload resource. This resource is writable to allow the server to adjust the Last Delivered Interval value if the server and client is out of sync.]]></Description>
+            </Item>
+            <Item ID="6006">
+                <Name>Latest Recorded Interval</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Latest Recorded Interval is a readable resource representing the currently highest recorded interval on the device. Interval times represent the end of the interval, not the beginning.]]></Description>
+            </Item>
+            <Item ID="6007">
+                <Name>Interval Delivery Midnight Aligned</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Boolean</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Delivery Midnight Aligned is a readable and writable resource used to indicate if data is delivered only to the previous midnight (1) or if part-day data can be delivered (0). Calculating Midnight should consider the Interval UTC Offset resource, or if empty, the Device [/3/0/14] object instance resource.]]></Description>
+            </Item>
+            <Item ID="6008">
+                <Name>Interval Historical Read</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Historical Interval Read is an executable resource designed to retrieve ad-hoc interval read data. The resource takes two arguments:-
+Argument 0: First Interval time to Retrieve represented as number of seconds since Jan 1st, 1970 in the UTC time zone.
+Argument 1: Last interval time to Retrieve represented as number of seconds since Jan 1st, 1970 in the UTC time zone.
+The dates should be inclusive based on the end time of the interval. The data retrieved from this resource will be readable (or observable) from the Historical Read Payload Resource.
+
+As an example, the Argument List to retrieve data from Midnight 2nd March (UTC+10) to Midnight 6rd March (UTC+10) for a specific instance of the interval data object, would be constructed as follows:-
+
+0='1488463200',1='1488808800']]></Description>
+            </Item>
+            <Item ID="6009">
+                <Name>Interval Historical Read Payload</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Opaque</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Historical Read Payload resource is the representation of the data requested by the Historical Interval Read executable resource. The format of this Opaque value should be identical to the Latest Payload resource. If no Historical Interval Read has been executed, this resource should return and empty Opaque value. This resource can either be Read from the Server or set up as an observation and Notified to the server as soon as the historical data is available. When this payload is delivered to the LwM2M server, via either a read request or a confirmed observation on this Object, Object Instance or Resource, the Historical Read Payload should be set to an empty Opaque value.]]></Description>
+            </Item>
+            <Item ID="6026">
+                <Name>Start</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Start is an executable resource that enables the recording of interval data. The first interval recorded will have a timestamp based on the Interval Start Offset resource. This executable resource takes no arguments. Refer to re-usable resource LogStart for further details.]]></Description>
+            </Item>
+            <Item ID="6027">
+                <Name>Stop</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Stop (LogStop) is an executable resource that disables the recording of interval data for this object instance. This executable resource takes no arguments. Refer to re-usable resource LogStop for further details.]]></Description>
+            </Item>
+            <Item ID="6028">
+                <Name>Status</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Recording Enabled is a read-only resource providing an indication of if interval data is currently being recorded for this object instance. Refer to re-usable resource LogStatus for further details.]]></Description>
+            </Item>
+            <Item ID="6029">
+                <Name>Latest Payload</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Opaque</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[The Latest Payload resource is a read-only serialised Opaque (Binary) representation of all the Interval Data between the Last Delivered Interval and the Latest Recorded Interval, accounting for the Delivery Midnight Aligned resource. When this payload is delivered to the LwM2M server, via either a read request or a confirmed observation on this Object, Object Instance or Resource, the Latest Delivered Interval should be updated. When no new data exists, an empty Opaque value should be provided.
+
+The payload data can be provided in an implementation specific serialisation, but by default for fixed length values should use the OMA-LwM2M CBOR format encoded as follows:
+
+1. 8-bit integer, value 2 representing OMA-LwM2M CBOR format.
+2. Interval Data Instance ID/ Class [16-bit integer]
+3. Timestamp of first Interval [32-bit integer] representing the number of seconds since Jan 1st, 1970 in the UTC time zone.
+4. Interval Period in seconds [32-bit integer]
+5. Number of intervals in Payload [16-bit integer]
+6. Number of Values Per Interval [8-bit integer]
+7. Size of Value 1 in bits [8-bit integer]
+8. Size of Value 2 in bits [8-bit integer]
+...
+9. Size of Value N in bits [8-bit integer]
+10. Interval 1 Value 1 [x bits]
+11. Interval 1 Value 2 [x bits]
+...
+12. Interval 1 Value N [x bits]
+...
+13. Interval N Value N [x bits]
+
+If for some implementation specific reason, there are missing intervals in the sequence, the payload may consist of multiple blocks of the above serialised data (appended into a single binary opaque value), each block representing a continuous series of interval data.
+]]>                </Description>
+            </Item>
+        </Resources>
+        <Description2></Description2>
+    </Object>
+</LWM2M>

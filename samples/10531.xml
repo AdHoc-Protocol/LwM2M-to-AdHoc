@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>Thread Network</Name>
+        <Description1><![CDATA[Thread mesh network management. Border router configuration, network formation, and mesh topology monitoring.]]></Description1>
+        <ObjectID>10531</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10531</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>Network Name</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread network name (SSID). Human-readable identifier for the Thread network. Maximum 16 characters, UTF-8 encoded. Must be unique if multiple Thread networks are in range. Used during device commissioning to identify target network. Examples: "matter-thread", "home-network", "apt-101-thread". Visible to Thread devices during scanning. Should be descriptive but not contain sensitive information. Default: "matter-thread". Change before creating network for custom deployments. Used in Thread Operational Dataset generation.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>PAN ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0x0000..0xFFFF</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread Personal Area Network ID. 16-bit identifier used for network segmentation. Range: 0x0000-0xFFFF (0-65535 decimal). Should be unique among nearby Thread networks to avoid conflicts. Used in Thread beacon frames and network discovery. Random value recommended for security. Default: 0x1234. Change for production deployments. Conflicts with nearby networks using same PAN ID can cause connectivity issues. Used with Extended PAN ID for complete network identification. Part of Thread Operational Dataset.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>Channel</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>11..26</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread network radio channel. Range: 11-26 (IEEE 802.15.4, 2.4 GHz band). Channel selection affects network performance and interference. Recommendations: Channel 15-20 for less WiFi interference in most regions, avoid channels 11-14 and 25-26 if strong WiFi networks present, scan environment before selection. Default: 15 (good balance between WiFi and Thread). Higher channels (20-26) may have better performance in WiFi-dense environments. Some regions restrict certain channels - verify local regulations. Cannot change channel while Border Router is running.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>Extended PAN ID</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread Extended Personal Area Network ID. 64-bit (8 bytes) globally unique network identifier. Format: 16-character hex string (e.g., "1111111122222222"). Used with PAN ID for complete network identification. Must be unique across all Thread networks to prevent conflicts. Randomly generated by default for security. Never reuse Extended PAN IDs across different networks. Used in Thread commissioning and operational dataset. Visible during device joining process. Essential component of Thread network credentials. Change only when creating new network, not during operation.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>Network Key</Name>
+                <Operations>RW</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>String</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread network master key for encryption and authentication. 128-bit (16 bytes) symmetric key. Format: 32-character hex string (e.g., "00112233445566778899aabbccddeeff"). Randomly generated by default using cryptographically secure random number generator. Must be kept secret - compromise allows unauthorized network access. All Thread network traffic encrypted using keys derived from this master key. Required for device commissioning. Distribute securely to commissioned devices. Change triggers network-wide key rotation. Store securely, never log or transmit in clear. Used in Thread Operational Dataset generation.]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>Active Timestamp</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Time</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Unix timestamp when Thread network was created or last reconfigured. Updated when Create Network execute resource is called. Used in Thread Operational Dataset as Active Timestamp field. Indicates currency of network configuration. Value 0 means network not yet created. Thread devices use timestamp to determine if they need to update network configuration. Increments on configuration changes. Essential for Thread network version management. Persists across Border Router restarts. Used to detect stale network configurations.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>Border Router State</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..4</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Current Thread Border Router operational state. Values: 0=Disabled (Border Router not initialized), 1=Stopped (initialized but not running), 2=Starting (initialization in progress), 3=Running (actively routing Thread traffic), 4=Error (fault state, check logs). Updated automatically during Border Router lifecycle. State 3 (Running) required for Thread device communication. Transitional state 2 (Starting) typically lasts 5-15 seconds. Error state 4 requires Border Router restart. Monitor this resource to track Border Router health. Essential for troubleshooting Thread connectivity issues.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>Operational Dataset</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Opaque</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Thread Operational Dataset in standard Thread specification format. Contains complete network configuration: Network Name, Extended PAN ID, Network Key, PAN ID, Channel, Active Timestamp, security policies. Encoded as TLV (Type-Length-Value) binary format per Thread specification. Generated when Create Network is executed. Used during Matter device commissioning to provision Thread network credentials. Compatible with standard Thread commissioning tools and protocols. Can be exported for backup or device provisioning outside Matter ecosystem. Essential for Thread device joining process. Read-only, automatically generated from individual network parameters.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Devices Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Number of Thread devices currently connected to this Thread network. Includes: routers (mains-powered devices providing routing), end devices (sleepy battery-powered devices), router-eligible devices. Excludes: the Border Router itself, devices in other Thread networks. Updated periodically through Thread network topology discovery. Value lags actual network state by up to 60 seconds. Use for network capacity planning and health monitoring. High device count may indicate network scaling needs. Sudden drops may indicate network issues. Value 0 normal when network first created.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Create Network</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to create Thread network with configured parameters. Validates all network configuration resources (Network Name, PAN ID, Channel, Extended PAN ID, Network Key). Generates Thread Operational Dataset. Sets Active Timestamp to current time. Prepares network for Border Router start. Does not start Border Router - use Start Border Router execute resource. Can be executed multiple times to reconfigure network (when Border Router stopped). Essential first step before enabling Thread functionality. Validates: channel range (11-26), Extended PAN ID length (16 hex chars), Network Key length (32 hex chars), Network Name length (max 16 chars). Updates Operational Dataset resource on success.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Start Border Router</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to start Thread Border Router. Requires: network created (Active Timestamp non-zero), Border Router State not already Running, compatible hardware with Thread radio. Initializes Thread protocol stack, forms Thread network, enables routing between Thread and IP networks, advertises Border Router services, enables Thread device commissioning. Updates Border Router State through Starting to Running. Typical startup time: 5-15 seconds. On success, Thread devices can discover and join network. Enables communication with Thread-based Matter devices. Check Border Router State for confirmation. Fails if hardware not compatible or network not created.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Stop Border Router</Name>
+                <Operations>E</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type></Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Execute to stop Thread Border Router. Gracefully shuts down: stops accepting new device joins, maintains existing device sessions briefly, disables routing, shuts down Thread stack. Updates Border Router State to Stopped. Existing Thread devices lose connectivity until Border Router restarted. Does not delete network configuration - can restart with same settings. Use for: maintenance operations, network reconfiguration, troubleshooting, resource conservation. After stopping, can modify network parameters (Channel, PAN ID, etc.) and recreate network. Stopping is faster than starting (typically 1-2 seconds). Does not affect Matter fabric or commissioned devices, only Thread connectivity.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>

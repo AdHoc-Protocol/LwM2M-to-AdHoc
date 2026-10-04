@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BSD 3-Clause License
+
+Copyright (c) 2024, Walt Technologies
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<LWM2M xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.openmobilealliance.org/tech/profiles/LWM2M.xsd">
+    <Object ObjectType="MODefinition">
+        <Name>System Monitor</Name>
+        <Description1><![CDATA[This LwM2M Object provides comprehensive system monitoring for embedded Linux devices and routers. It reports CPU usage, memory statistics, thermal status, and system load metrics. Essential for remote monitoring of device health, performance, and resource utilization on OpenWRT-based routers and IoT gateways.]]></Description1>
+        <ObjectID>10518</ObjectID>
+        <ObjectURN>urn:oma:lwm2m:x:10518</ObjectURN>
+        <LWM2MVersion>1.0</LWM2MVersion>
+        <ObjectVersion>1.0</ObjectVersion>
+        <MultipleInstances>Single</MultipleInstances>
+        <Mandatory>Optional</Mandatory>
+        <Resources>
+            <Item ID="0">
+                <Name>CPU Usage Percentage</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration>0..100</RangeEnumeration>
+                <Units>%</Units>
+                <Description><![CDATA[Current CPU utilization as percentage (0-100%). This is the average across all CPU cores if multi-core.]]></Description>
+            </Item>
+            <Item ID="1">
+                <Name>CPU Frequency</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>MHz</Units>
+                <Description><![CDATA[Current CPU operating frequency in megahertz. May vary with dynamic frequency scaling.]]></Description>
+            </Item>
+            <Item ID="2">
+                <Name>CPU Temperature</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>-40..125</RangeEnumeration>
+                <Units>Cel</Units>
+                <Description><![CDATA[Current CPU die temperature in degrees Celsius. Useful for thermal monitoring and throttling detection.]]></Description>
+            </Item>
+            <Item ID="3">
+                <Name>RAM Total</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[Total system RAM in kibibytes.]]></Description>
+            </Item>
+            <Item ID="4">
+                <Name>RAM Used</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[Currently used RAM in kibibytes (excluding cached and buffered memory).]]></Description>
+            </Item>
+            <Item ID="5">
+                <Name>RAM Free</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[Currently free/available RAM in kibibytes.]]></Description>
+            </Item>
+            <Item ID="6">
+                <Name>RAM Cached</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[RAM used for filesystem cache in kibibytes. This memory can be reclaimed if needed.]]></Description>
+            </Item>
+            <Item ID="7">
+                <Name>RAM Buffers</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[RAM used for kernel buffers in kibibytes.]]></Description>
+            </Item>
+            <Item ID="8">
+                <Name>Swap Total</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[Total swap space in kibibytes. Returns 0 if swap is not configured.]]></Description>
+            </Item>
+            <Item ID="9">
+                <Name>Swap Used</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>KiB</Units>
+                <Description><![CDATA[Currently used swap space in kibibytes. High swap usage may indicate memory pressure.]]></Description>
+            </Item>
+            <Item ID="10">
+                <Name>Load Average 1min</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..1000</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[System load average over the last 1 minute. Values above CPU core count indicate CPU saturation.]]></Description>
+            </Item>
+            <Item ID="11">
+                <Name>Load Average 5min</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..1000</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[System load average over the last 5 minutes.]]></Description>
+            </Item>
+            <Item ID="12">
+                <Name>Load Average 15min</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Float</Type>
+                <RangeEnumeration>0..1000</RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[System load average over the last 15 minutes. Provides longer-term load trend information.]]></Description>
+            </Item>
+            <Item ID="13">
+                <Name>Uptime</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Mandatory</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units>s</Units>
+                <Description><![CDATA[System uptime in seconds since last boot.]]></Description>
+            </Item>
+            <Item ID="14">
+                <Name>Process Count</Name>
+                <Operations>R</Operations>
+                <MultipleInstances>Single</MultipleInstances>
+                <Mandatory>Optional</Mandatory>
+                <Type>Integer</Type>
+                <RangeEnumeration></RangeEnumeration>
+                <Units></Units>
+                <Description><![CDATA[Total number of running processes on the system.]]></Description>
+            </Item>
+        </Resources>
+        <Description2><![CDATA[]]></Description2>
+    </Object>
+</LWM2M>
